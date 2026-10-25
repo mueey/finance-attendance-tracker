@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {initStore,getState} from '../js/core/store.js';
+import {markAttendance} from '../js/features/calendar.js';
+import {getFinance} from '../js/core/finance.js';
+const saved=new Map();
+const initial={version:2,settings:{workspace:'Test',studentName:'',defaultFineRate:50,minimumAttendance:75,theme:'light'},courses:[{id:'CS',name:'Comp Sci',code:'CS',type:'class',schedule:'Mon',weekdays:[1],startDate:'2026-10-01',endDate:'',eventDate:'',time:'',venue:'',fineRate:50,createdAt:'2026-10-01',archived:false}],attendance:[],adjustments:[],bills:[],payments:[]};
+saved.set('trackerist_v2_state',JSON.stringify(initial));
+globalThis.localStorage={getItem:k=>saved.get(k)??null,setItem:(k,v)=>saved.set(k,String(v))};
+initStore();
+test('one-click calendar changes status in-place without duplicate fine or attendance record',()=>{
+ markAttendance('CS','2026-10-26','absent');
+ assert.equal(getState().attendance.length,1);assert.equal(getFinance(getState()).fineTotal,50);
+ markAttendance('CS','2026-10-26','absent');
+ assert.equal(getState().attendance.length,1);assert.equal(getFinance(getState()).fineTotal,50);
+ markAttendance('CS','2026-10-26','excused');
+ assert.equal(getState().attendance.length,1);assert.equal(getFinance(getState()).fineTotal,0);
+ markAttendance('CS','2026-10-26','present');
+ assert.equal(getState().attendance[0].status,'present');assert.equal(getFinance(getState()).fineTotal,0);
+ assert.throws(()=>markAttendance('none','2026-10-26','absent'),/Subject not found/);
+});
