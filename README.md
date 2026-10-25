@@ -1,2 +1,2 @@
 # attendance
-attendance and finace tracker
+personal attendance and finance tracker
