@@ -34,7 +34,7 @@ function draw(){
  const route=location.hash.replace(/^#\//,'').split(/[?#]/)[0],page=modules[route]?route:'dashboard';
  renderSettings();moreButton?.classList.toggle('active',!['dashboard','attendance','calendar','fines'].includes(page));document.querySelectorAll('[data-route]').forEach(a=>{const active=a.dataset.route===page;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
  view.onclick=null;view.innerHTML=modules[page].render();view.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('href',`#/${a.dataset.route}`));modules[page].bind();
- document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 3.1`;closeSidebar();
+ document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 3.2`;closeSidebar();
 }
 function connection(){const x=document.querySelector('#connection-status');if(!x)return;x.textContent=navigator.onLine?'● Ready offline':'● Offline mode';x.classList.toggle('offline',!navigator.onLine);}
 function fatal(err){view.innerHTML='<div class="card"><div class="card-body"><h1 class="fs-4 text-danger">Unable to load Trackerist data</h1><p id="fatal-message"></p><p>Your browser data was not intentionally reset. Check storage permissions or recover from a prior JSON backup.</p></div></div>';view.querySelector('#fatal-message').textContent=err.message||String(err);}
@@ -46,6 +46,8 @@ function showAuth(){
  document.querySelector('#auth-subtitle').textContent=create?'Set a username and password for this browser. Existing Trackerist data will be kept.':'Sign in to continue to your attendance dashboard.';
  document.querySelector('#auth-submit').textContent=create?'Create account & open dashboard':'Sign in';
  document.querySelector('#auth-confirm-wrap').classList.toggle('d-none',!create);
+ document.querySelector('#auth-privacy-wrap').classList.toggle('d-none',!create);
+ const privacyAck=document.querySelector('#auth-privacy-ack');privacyAck.disabled=!create;privacyAck.required=create;privacyAck.checked=false;
  document.querySelector('#auth-password').autocomplete=create?'new-password':'current-password';
  document.querySelector('#auth-username').value=create?'':accountName();
  document.querySelector('#auth-password').value='';document.querySelector('#auth-confirm').value='';
@@ -63,6 +65,7 @@ function start(){
  form.onsubmit=async event=>{
   event.preventDefault();const create=!accountExists();const username=form.elements.username.value,password=form.elements.password.value;
   const error=document.querySelector('#auth-error'),submit=document.querySelector('#auth-submit');error.classList.add('d-none');
+  if(create&&!document.querySelector('#auth-privacy-ack').checked){error.textContent='Please review and acknowledge the Privacy Policy before creating an account.';error.classList.remove('d-none');return;}
   if(create&&password!==document.querySelector('#auth-confirm').value){error.textContent='Passwords do not match.';error.classList.remove('d-none');return;}
   submit.disabled=true;try{if(create)await createAccount(username,password);else await signIn(username,password);openDashboard();}
   catch(err){error.textContent=err.message||'Login failed.';error.classList.remove('d-none');}

@@ -36,7 +36,7 @@ test('offline service worker caches the locally stored Bootstrap Icons chevron',
  const icon=fs.readFileSync(new URL('../vendor/bootstrap-icons/chevron-down.svg',import.meta.url),'utf8');
  assert.match(css,/\.bi-chevron-down\{--bi-icon:url\("\.\.\/vendor\/bootstrap-icons\/chevron-down\.svg"\)\}/);
  assert.match(sw,/bootstrap-icons\/chevron-down.svg/);
- assert.match(sw,/trackerist-v3\.1\.0/);
+ assert.match(sw,/trackerist-v3\.2\.0/);
  assert.match(icon,/class="bi bi-chevron-down"/);
 });
 

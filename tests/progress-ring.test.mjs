@@ -34,7 +34,7 @@ test('dashboard order: snapshot and health precede the financial and attendance 
  let last=-1;for(const label of labels){const index=out.indexOf(label);assert.ok(index>last,label);last=index;}
  assert.equal((out.match(/FINANCIAL SNAPSHOT/g)||[]).length,1);
  assert.equal((out.match(/<div class="attendance-ring /g)||[]).length,3); // overall + compact preview + detail popup
- assert.match(out,/aria-label="Overall recorded attendance: No recorded attendance, target 75%"/);
+ assert.match(out,/aria-label="Academic class attendance: No recorded attendance, target 75%"/);
  assert.match(out,/aria-label="Semester attendance rate: No recorded attendance"/);
  assert.doesNotMatch(out,/aria-label="Semester attendance percentage"/);
 });
@@ -44,8 +44,8 @@ test('semester ring follows selected term and records without changing finance t
  s.attendance=[{id:'a1',courseId:'c',date:'2026-10-02',status:'present'},{id:'a2',courseId:'c',date:'2026-10-03',status:'absent'}];
  replaceState(s);const out=render();
  assert.match(out,/aria-label="Semester attendance rate: 50%"/);
- assert.match(out,/aria-label="Overall recorded attendance: 50%, target 75%"/);
+ assert.match(out,/aria-label="Academic class attendance: 50%, target 75%"/);
  assert.match(out,/stroke-dasharray="50 100"/);
  assert.match(out,/Total fines/);
- assert.match(out,/₱10\.00/);
+ assert.match(out,/₱0\.00/);
 });

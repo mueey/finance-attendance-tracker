@@ -26,7 +26,7 @@ test('calendar plans classes without creating attendance records or fines',()=>{
  assert.equal(s.attendance.length,0);assert.equal(getFinance(s).fineTotal,0);
  s.attendance.push({id:'r1',courseId:'math',date:'2026-10-26',status:'excused',slots:null,note:'sick',updatedAt:''});
  assert.equal(entriesOnDate(s,'2026-10-26')[0].record.status,'excused');assert.equal(getFinance(s).fineTotal,0);
- s.attendance[0].status='absent';assert.equal(getFinance(s).fineTotal,50);
+ s.attendance[0].status='absent';assert.equal(getFinance(s).fineTotal,0);
  s.attendance[0].status='present';assert.equal(getFinance(s).fineTotal,0);
 });
 test('special event can be scheduled once, off-schedule manual logs still visible',()=>{

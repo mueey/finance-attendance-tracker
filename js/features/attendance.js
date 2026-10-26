@@ -15,7 +15,7 @@ export function openAttendanceEditor(record=null,defaults={}){
  editModal({title:record?'Edit attendance entry':'Log attendance',submit:record?'Update attendance':'Save attendance',body:`<div class="row g-3">
  ${coursePickerMarkup(courses,courseId)}
  ${field('date','Date',record?.date||defaults.date||today(),{type:'date',required:true})}
- <div class="col-12" id="class-status">${selectField('status','Attendance status',statusOptions,record?.status||'present','col-12')}</div>
+ <div class="col-12" id="class-status">${selectField('status','Attendance status',statusOptions,record?.status||'present','col-12')}<div class="form-text">Academic class absences affect attendance rates but do not generate fines.</div></div>
  <div class="col-12" id="event-status"><div class="card bg-light border-0"><div class="card-body">
  <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap mb-2"><strong>Event time-in / time-out</strong><span class="badge text-bg-secondary">Each Absent slot = 1 fine</span></div>
  <p class="form-text mt-1">Individually choose Present, Absent, or Excused for each slot. The event fine rate applies separately to every Absent choice.</p>

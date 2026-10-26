@@ -63,8 +63,8 @@ test('previous event-wide Absent with no slot details preserves its historical s
  assert.equal(getFinance(old).automatic[0].slot,'legacy');
  old.attendance[0].slots=slots(4);assert.equal(getFinance(old).fineTotal,240);
 });
-test('class absences still incur one fine per absent date regardless of event slot policy',()=>{
+test('class absences incur no automatic fine even when an old record has a fine rate',()=>{
  const s=initialState();s.courses.push({id:'c',name:'Subject',type:'class',fineRate:50});
  s.attendance.push({id:'c-a',courseId:'c',date:iso,status:'absent',slots:null});
- const fin=getFinance(validateAndNormalize(s));assert.equal(fin.fineTotal,50);assert.equal(fin.automatic.length,1);
+ const fin=getFinance(validateAndNormalize(s));assert.equal(fin.fineTotal,0);assert.equal(fin.automatic.length,0);assert.equal(validateAndNormalize(s).courses[0].fineRate,0);
 });

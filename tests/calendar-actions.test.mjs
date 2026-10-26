@@ -10,9 +10,9 @@ globalThis.localStorage={getItem:k=>saved.get(k)??null,setItem:(k,v)=>saved.set(
 initStore();
 test('one-click calendar changes status in-place without duplicate fine or attendance record',()=>{
  markAttendance('CS','2026-10-26','absent');
- assert.equal(getState().attendance.length,1);assert.equal(getFinance(getState()).fineTotal,50);
+ assert.equal(getState().attendance.length,1);assert.equal(getFinance(getState()).fineTotal,0);
  markAttendance('CS','2026-10-26','absent');
- assert.equal(getState().attendance.length,1);assert.equal(getFinance(getState()).fineTotal,50);
+ assert.equal(getState().attendance.length,1);assert.equal(getFinance(getState()).fineTotal,0);
  markAttendance('CS','2026-10-26','excused');
  assert.equal(getState().attendance.length,1);assert.equal(getFinance(getState()).fineTotal,0);
  markAttendance('CS','2026-10-26','present');

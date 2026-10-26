@@ -4,16 +4,15 @@ import {missedEventSlots} from './event-slots.js';
 export function getFinance(state=getState()){
   const byCourse=new Map(state.courses.map(c=>[c.id,c]));
   // No stored auto-fine records: recalculated deterministically from attendance.
-  // One fine per missing event slot; one fine per absent academic class session.
+  // Academic class absences never generate automatic fines. Only absent event slots are charged.
   const automatic=state.attendance.filter(a=>a.status==='absent').flatMap(a=>{
-    const c=byCourse.get(a.courseId);if(!c)return [];
+    const c=byCourse.get(a.courseId);if(!c||c.type!=='event')return [];
     const rate=round2(c.fineRate||0);if(rate<=0)return [];
-    if(c.type==='event')return missedEventSlots(a).map(slot=>({
+    return missedEventSlots(a).map(slot=>({
       id:`auto_${a.id}_${slot.key}`,courseId:a.courseId,date:a.date,
       description:`${c.name} — ${slot.label} (Absent)`,amount:rate,unitRate:rate,
       slot:slot.key,automatic:true,attendanceId:a.id
     }));
-    return [{id:`auto_${a.id}`,courseId:a.courseId,date:a.date,description:`Absence: ${c.name}`,amount:rate,automatic:true,attendanceId:a.id}];
   });
   const manual=state.adjustments.map(a=>({...a,automatic:false}));
   const fineTotal=round2([...automatic,...manual].reduce((s,x)=>s+x.amount,0));
@@ -26,11 +25,12 @@ export function getFinance(state=getState()){
 }
 export const billPaidAmount=(id,state=getState())=>round2(state.payments.filter(p=>p.targetType==='bill'&&p.targetId===id).reduce((s,p)=>s+p.amount,0));
 export const billBalance=(bill,state=getState())=>round2(bill.amount-billPaidAmount(bill.id,state));
-export function getAttendanceStats(state=getState()){
- const relevant=state.attendance.filter(a=>a.status==='present'||a.status==='absent');
+export function getAttendanceStats(state=getState(),{type=null}={}){
+ const eligible=type ? new Set(state.courses.filter(c=>c.type===type).map(c=>c.id)) : null;
+ const relevant=state.attendance.filter(a=>(!eligible||eligible.has(a.courseId))&&(a.status==='present'||a.status==='absent'));
  const present=relevant.filter(a=>a.status==='present').length,absent=relevant.length-present;
  const rate=relevant.length?round2(present/relevant.length*100):null;
- const byCourse=state.courses.map(c=>{const records=state.attendance.filter(a=>a.courseId===c.id),counted=records.filter(a=>['present','absent'].includes(a.status));const p=counted.filter(a=>a.status==='present').length;return {...c,present:p,absent:counted.length-p,sessions:counted.length,rate:counted.length?round2(p/counted.length*100):null};});
+ const byCourse=state.courses.filter(c=>!type||c.type===type).map(c=>{const records=state.attendance.filter(a=>a.courseId===c.id),counted=records.filter(a=>['present','absent'].includes(a.status));const p=counted.filter(a=>a.status==='present').length;return {...c,present:p,absent:counted.length-p,sessions:counted.length,rate:counted.length?round2(p/counted.length*100):null};});
  return {present,absent,rate,records:state.attendance.length,byCourse};
 }
 export const overdueBills=(state=getState())=>state.bills.filter(b=>b.dueDate&&b.dueDate<today()&&billBalance(b,state)>0);

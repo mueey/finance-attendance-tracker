@@ -37,16 +37,16 @@ function seed(){
 test('semester calculations separate event slot fines and manual waivers by attendance/adjustment date',()=>{
  const s=seed(),a=getSemesterFinance(s,'first'),b=getSemesterFinance(s,'second');
  assert.equal(a.fineTotal,140); // 3 × ₱50 minus ₱10 waiver
- assert.equal(b.fineTotal,60); // one class absence
- assert.equal(a.fineChargeCount,4);assert.equal(b.fineChargeCount,1);
- assert.equal(getFinance(s).fineTotal,200); // overall unchanged
+ assert.equal(b.fineTotal,0); // academic classes are never automatically fined
+ assert.equal(a.fineChargeCount,4);assert.equal(b.fineChargeCount,0);
+ assert.equal(getFinance(s).fineTotal,140); // only event slots and manual adjustments
 });
 test('semester calculations allocate bill payments to the bill semester across transaction dates',()=>{
  const s=seed(),a=getSemesterFinance(s,'first'),b=getSemesterFinance(s,'second');
  assert.deepEqual({billTotal:a.billsTotal,charge:a.charged,paid:a.paid,balance:a.due,credit:a.credit},
  {billTotal:400,charge:540,paid:175,balance:365,credit:0});
  assert.deepEqual({billTotal:b.billsTotal,charge:b.charged,paid:b.paid,balance:b.due},
- {billTotal:200,charge:260,paid:60,balance:200});
+ {billTotal:200,charge:200,paid:60,balance:140});
  assert.equal(a.receivedInPeriod,40); // cash date: bp2 (belongs to second) arrived in first
  assert.equal(b.receivedInPeriod,195); // cash date: bp1 + fp1 + fp2
  assert.equal(getSemesterFinance(s,'all').paid,235);
