@@ -46,12 +46,33 @@ body[data-theme=dark] .semester-breakdown strong{color:#e2ecf8}
 @media(max-width:575px){.semester-summary .card-body{padding:16px}.semester-picker{min-width:0;width:100%}.semester-metric{padding:12px;min-height:105px}.semester-amount{font-size:1.2rem;letter-spacing:-.3px}.semester-summary .metric-note{font-size:.71rem}}
 
 /* 2.5: attendance summary shares the term selector with finances */
-.semester-attendance .semester-rate .progress{height:8px;background:#e5ebf3}
-.semester-attendance .semester-rate .progress-bar{background:#27b694}
-.semester-attendance .semester-rate .semester-amount{font-size:clamp(1.6rem,3vw,2rem)}
 .semester-course-table{max-height:310px;overflow-y:auto;overscroll-behavior:contain;border:1px solid #e8edf3;border-radius:9px}
 .semester-course-table thead{position:sticky;top:0;z-index:1;background:var(--bs-body-bg,#fff)}
 .semester-course-table table{min-width:610px}
 .semester-course-table th,.semester-course-table td{padding:10px 12px;white-space:nowrap}
 .semester-course-table th:first-child,.semester-course-table td:first-child{min-width:145px;white-space:normal}
 @media(max-width:575px){.semester-attendance .semester-metric{min-height:100px}.semester-attendance .semester-course-table{max-height:270px}}
+
+/* 2.8: circular attendance indicators and dashboard overview priority. */
+.attendance-health-layout{display:grid;grid-template-columns:minmax(160px,200px) minmax(0,1fr);align-items:center;gap:clamp(16px,3vw,30px)}
+.attendance-health-details{min-width:0}
+.attendance-health-details .progress{height:6px}
+.attendance-ring{--ring-progress:#25b99a;position:relative;display:grid;place-items:center;flex-shrink:0;aspect-ratio:1;max-width:100%;width:170px;color:var(--ink)}
+.attendance-ring--semester{width:132px;margin:5px auto}
+.attendance-ring--below{--ring-progress:#e66c7d}
+.attendance-ring--empty{--ring-progress:#b6c0d0}
+.attendance-ring svg{display:block;width:100%;height:100%;transform:none;overflow:visible}
+.attendance-ring-track,.attendance-ring-progress{fill:none;stroke-width:9;transform:rotate(-90deg);transform-origin:60px 60px}
+.attendance-ring-track{stroke:#e7edf5}
+.attendance-ring-progress{stroke:var(--ring-progress);stroke-linecap:round;transition:stroke-dasharray .25s ease}
+.attendance-ring-goal{fill:none;stroke:#5b74a3;stroke-width:3;transform:rotate(-90deg);transform-origin:60px 60px}
+.attendance-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;pointer-events:none}
+.attendance-ring-value{font-size:clamp(1.65rem,3vw,2.05rem);font-weight:850;letter-spacing:-1.2px;line-height:1.15;font-variant-numeric:tabular-nums}
+.attendance-ring-center span{font-size:.69rem;color:var(--muted);font-weight:650}
+.attendance-ring--semester .attendance-ring-value{font-size:1.55rem}
+.attendance-health-details .progress-bar{background:#26b599}
+body[data-theme=dark] .attendance-ring-track{stroke:#344b66}
+body[data-theme=dark] .attendance-ring-goal{stroke:#afc0df}
+@media(max-width:575.98px){.attendance-health-layout{grid-template-columns:1fr;gap:15px}.attendance-ring--overall{width:164px}.attendance-ring--semester{width:112px}.semester-attendance .semester-rate{justify-content:center;gap:3px}.attendance-health-details .row{row-gap:14px}}
+@media(min-width:576px) and (max-width:850px){.attendance-health-layout{grid-template-columns:160px minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.attendance-ring-progress{transition:none}}

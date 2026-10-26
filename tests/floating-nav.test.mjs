@@ -33,7 +33,7 @@ test('sidebar icons use Bootstrap SVG assets, and offline shell is pre-cached',(
   assert.match(html,new RegExp(`bi-${name}`));
   assert.ok(existsSync(resolve(root,`vendor/bootstrap-icons/${name}.svg`)));
  }
- assert.match(sw,/trackerist-v2\.7\.0/);
+ assert.match(sw,/trackerist-v2\.8\.0/);
 });
 test('built-in finance labels use English only',()=>{
  for(const file of ['index.html','js/features/dashboard.js','js/features/bills.js','js/features/payments.js','js/features/reports.js']){

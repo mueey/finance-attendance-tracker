@@ -111,7 +111,6 @@ button:focus-visible,a:focus-visible{outline:3px solid #8aafff;outline-offset:2p
   .metric-value{font-size:clamp(1.08rem,4.7vw,1.5rem);line-height:1.23;margin:8px 0 5px}
   .semester-metric{min-height:100px;padding:12px}
   .semester-amount{font-size:clamp(1.05rem,4.6vw,1.32rem)}
-  .semester-attendance .semester-rate .semester-amount{font-size:1.6rem}
   .semester-summary .d-flex.align-items-end>div:has(>.semester-picker){flex:1 1 100%}
   .semester-summary .card-body>.d-flex>.d-flex{width:100%}
   #editor-modal .modal-dialog{height:100dvh;margin:0}
