@@ -2,6 +2,7 @@ import {getState,update} from '../core/store.js';
 import {id,today,html,chip,pageHead,friendlyDate} from '../core/utils.js';
 import {entriesOnDate} from '../core/schedule.js';
 import {openAttendanceEditor} from './attendance.js';
+import {countEventSlots} from '../core/event-slots.js';
 import {toast} from '../core/ui.js';
 let visibleMonth=today().slice(0,7),selectedDate=today();
 const weekdays=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -34,19 +35,21 @@ function showDay(){
  document.querySelector('#calendar-day-count').textContent=entries.length?`${entries.length} subject${entries.length===1?'':'s'} · ${pending} pending`:'No scheduled subjects';
  document.querySelector('#calendar-day-records').innerHTML=entries.length?entries.map(({course,record,scheduled})=>`<div class="calendar-day-course border-bottom py-3">
    <div class="d-flex align-items-start justify-content-between gap-2 mb-2"><div><strong>${html(course.name)}</strong><div class="mini-muted">${html(course.time||'No time set')}${scheduled?' · Scheduled':' · Extra log'}</div></div>${statusLabel(record)}</div>
-   <div class="attendance-quick-actions" role="group" aria-label="Mark attendance for ${html(course.name)}">
+   ${course.type==='event'?`<div class="small mb-2 text-secondary">${record?.slots?(()=>{const x=countEventSlots(record.slots,record.status);return `${x.present} Present · ${x.absent} Absent · ${x.excused} Excused`})():record?.status==='absent'?'Legacy day absence (1 fine)':'Choose AM/PM check-in/out separately'}</div><button class="btn btn-sm btn-outline-primary" data-edit-course="${html(course.id)}">Set AM/PM slots / Edit</button>`:
+   `<div class="attendance-quick-actions" role="group" aria-label="Mark attendance for ${html(course.name)}">
      <button class="btn btn-sm ${record?.status==='present'?'btn-success':'btn-outline-success'}" data-mark="present" data-course="${html(course.id)}">Present</button>
      <button class="btn btn-sm ${record?.status==='absent'?'btn-danger':'btn-outline-danger'}" data-mark="absent" data-course="${html(course.id)}">Absent</button>
      <button class="btn btn-sm ${record?.status==='excused'?'btn-warning':'btn-outline-warning'}" data-mark="excused" data-course="${html(course.id)}">Excused</button>
      <button class="btn btn-sm btn-light" data-edit-course="${html(course.id)}">${record?'Edit / note':'More'}</button>
-   </div>
+   </div>`}
   </div>`).join(''):`<div class="text-secondary small py-4">No scheduled classes this day. Set weekly days in Courses & Events, or add an extra log using the button above.</div>`;
 }
 export function markAttendance(courseId,date,status){
  if(!['present','absent','excused'].includes(status))throw Error('Invalid attendance status.');
  const course=getState().courses.find(c=>c.id===courseId);if(!course)throw Error('Subject not found.');
+ if(course.type==='event'&&status==='absent')throw Error('For an event, choose the AM/PM slot statuses using the event editor.');
  update(s=>{const existing=s.attendance.find(a=>a.courseId===courseId&&a.date===date);
- const slots=course.type==='event'&&status==='present'?{amIn:true,amOut:true,pmIn:true,pmOut:true}:null;
+ const slots=course.type==='event'?Object.fromEntries(['amIn','amOut','pmIn','pmOut'].map(k=>[k,status])):null;
  if(existing)Object.assign(existing,{status,slots,updatedAt:new Date().toISOString()});
  else s.attendance.push({id:id(),courseId,date,status,slots,note:'',updatedAt:new Date().toISOString()});
  });

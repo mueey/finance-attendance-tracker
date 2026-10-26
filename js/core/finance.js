@@ -1,8 +1,20 @@
 import {getState} from './store.js';
 import {round2,today} from './utils.js';
+import {missedEventSlots} from './event-slots.js';
 export function getFinance(state=getState()){
   const byCourse=new Map(state.courses.map(c=>[c.id,c]));
-  const automatic=state.attendance.filter(a=>a.status==='absent').map(a=>({id:`auto_${a.id}`,courseId:a.courseId,date:a.date,description:`Absence: ${byCourse.get(a.courseId)?.name||'Course'}`,amount:round2(byCourse.get(a.courseId)?.fineRate||0),automatic:true,attendanceId:a.id})).filter(a=>a.amount>0);
+  // No stored auto-fine records: recalculated deterministically from attendance.
+  // One fine per missing event slot; one fine per absent academic class session.
+  const automatic=state.attendance.filter(a=>a.status==='absent').flatMap(a=>{
+    const c=byCourse.get(a.courseId);if(!c)return [];
+    const rate=round2(c.fineRate||0);if(rate<=0)return [];
+    if(c.type==='event')return missedEventSlots(a).map(slot=>({
+      id:`auto_${a.id}_${slot.key}`,courseId:a.courseId,date:a.date,
+      description:`${c.name} — ${slot.label} (Absent)`,amount:rate,unitRate:rate,
+      slot:slot.key,automatic:true,attendanceId:a.id
+    }));
+    return [{id:`auto_${a.id}`,courseId:a.courseId,date:a.date,description:`Absence: ${c.name}`,amount:rate,automatic:true,attendanceId:a.id}];
+  });
   const manual=state.adjustments.map(a=>({...a,automatic:false}));
   const fineTotal=round2([...automatic,...manual].reduce((s,x)=>s+x.amount,0));
   const billsTotal=round2(state.bills.reduce((s,b)=>s+b.amount,0));
@@ -22,7 +34,6 @@ export function getAttendanceStats(state=getState()){
  return {present,absent,rate,records:state.attendance.length,byCourse};
 }
 export const overdueBills=(state=getState())=>state.bills.filter(b=>b.dueDate&&b.dueDate<today()&&billBalance(b,state)>0);
-
 export function sessionsToTarget(present,absent,threshold){
  const total=present+absent,rate=Number(threshold)/100;
  if(total===0||present/total>=rate)return 0;
