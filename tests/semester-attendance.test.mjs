@@ -92,7 +92,7 @@ test('dashboard includes semester attendance card, current selection, per-course
  const data=new Map();globalThis.localStorage={getItem:key=>data.get(key)||null,setItem:(key,v)=>data.set(key,v)};
  initStore();replaceState(fixture());
  const out=renderDashboard();
- for(const term of ['Semester attendance summary','Attendance rate','Pending','Present','Absent','Excused','Per subject / event','57.14%','semester-attendance-logs','Math &lt;Algebra&gt;'])assert.ok(out.includes(term),term);
+ for(const term of ['Semester attendance summary','Attendance rate','Pending','Present','Absent','Excused','Subjects &amp; Events','57.14%','semester-attendance-logs','Math &lt;Algebra&gt;'])assert.ok(out.includes(term),term);
  assert.ok(!out.includes('Math <Algebra>'));
  assert.ok(out.includes('1st Semester &lt;Autumn&gt;'));
  assert.ok(out.includes('id="dashboard-semester-select"'));

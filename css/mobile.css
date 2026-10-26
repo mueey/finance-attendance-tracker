@@ -135,7 +135,7 @@ button:focus-visible,a:focus-visible{outline:3px solid #8aafff;outline-offset:2p
   .mobile-stack-table tbody td .chip{white-space:normal;text-align:center}
   .mobile-stack-table tbody td>strong{max-width:calc(100% - 99px)}
   /* A summary comparison stays a real horizontally scrollable table. */
-  .semester-course-table .table-wrap{overflow-x:auto}
+  .semester-course-table{overflow-x:auto}
   .semester-course-table table{min-width:610px}
   .app-footer{padding:8px;font-size:.7rem}
 }

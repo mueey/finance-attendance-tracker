@@ -76,3 +76,26 @@ body[data-theme=dark] .attendance-ring-goal{stroke:#afc0df}
 @media(max-width:575.98px){.attendance-health-layout{grid-template-columns:1fr;gap:15px}.attendance-ring--overall{width:164px}.attendance-ring--semester{width:112px}.semester-attendance .semester-rate{justify-content:center;gap:3px}.attendance-health-details .row{row-gap:14px}}
 @media(min-width:576px) and (max-width:850px){.attendance-health-layout{grid-template-columns:160px minmax(0,1fr)}}
 @media(prefers-reduced-motion:reduce){.attendance-ring-progress{transition:none}}
+
+/* 2.9: Collapsible, independently scrollable semester subject/event list. */
+.semester-subject-section{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.semester-subject-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;background:var(--bs-body-bg,#fff);color:var(--ink);border:0;padding:16px 18px;min-height:54px}
+.semester-subject-toggle:hover{background:#f5f7fc}
+.semester-subject-toggle:focus-visible{outline:3px solid #8aafff;outline-offset:-3px}
+.semester-subject-toggle .bi-icon{width:18px;height:18px}
+.semester-subject-toggle .semester-chevron{transition:transform .2s ease}
+.semester-subject-toggle[aria-expanded="true"] .semester-chevron{transform:rotate(180deg)}
+.semester-subject-panel{padding:0 17px 17px}
+.semester-subject-panel .semester-course-table{max-height:340px;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;border:1px solid var(--border);border-radius:9px}
+.semester-subject-panel .semester-course-table thead{position:sticky;top:0;z-index:2;background:var(--bs-body-bg,#fff)}
+body[data-theme=dark] .semester-subject-toggle{background:#1c2b40;color:var(--ink)}
+body[data-theme=dark] .semester-subject-toggle:hover{background:#273a53}
+@media(max-width:575.98px){
+ .semester-subject-toggle{padding:13px 12px;min-height:50px}
+ .semester-subject-panel{padding:0 10px 12px}
+ .semester-subject-panel .semester-course-table{max-height:min(45dvh,300px)}
+ .semester-expand-label{font-size:.73rem}
+}
+@media(prefers-reduced-motion:reduce){.semester-subject-toggle .semester-chevron{transition:none}}
+
+.semester-subject-toggle[aria-expanded="true"] .semester-expand-closed,.semester-subject-toggle[aria-expanded="false"] .semester-expand-open{display:none}

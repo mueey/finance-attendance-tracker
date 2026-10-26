@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#12253c">
   <meta name="description" content="Offline attendance, fines, bills, and payment tracker">
-  <title>Trackerist 2.6 • Attendance & Finance</title>
+  <title>Trackerist 2.9 • Attendance & Finance</title>
   <link rel="icon" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="vendor/bootstrap.min.css">
   <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/bootstrap-icons-local.css">
   <link rel="stylesheet" href="css/mobile.css">
   <script src="vendor/bootstrap.bundle.min.js" defer></script>
   <script type="module" src="js/app.js"></script>
@@ -34,37 +35,37 @@
 </section>
 <div class="app-shell d-none" id="app-shell">
   <aside class="sidebar" id="sidebar" aria-label="All navigation">
-    <div class="brand"><span class="brand-icon">T<span class="brand-dot">.</span></span><div><strong>Trackerist</strong><small>ATTENDANCE & FINANCE</small></div><button class="sidebar-close" id="sidebar-close" type="button" aria-label="Close navigation menu">×</button></div>
+    <div class="brand"><span class="brand-icon">T<span class="brand-dot">.</span></span><div><strong>Trackerist</strong><small>ATTENDANCE & FINANCE</small></div><button class="sidebar-close" id="sidebar-close" type="button" aria-label="Close navigation menu"><span class="bi-icon bi-x-lg" aria-hidden="true"></span></button></div>
     <div class="nav-caption">WORKSPACE</div>
     <nav id="primary-nav" class="nav flex-column sidebar-nav" aria-label="Main navigation">
-      <a class="nav-link" href="#/dashboard" data-route="dashboard"><span class="nav-symbol"></span>Dashboard</a>
-      <a class="nav-link" href="#/courses" data-route="courses"><span class="nav-symbol">▤</span>Courses & Events</a>
-      <a class="nav-link" href="#/attendance" data-route="attendance"><span class="nav-symbol">◷</span>Attendance</a>
-      <a class="nav-link" href="#/calendar" data-route="calendar"><span class="nav-symbol">▦</span>Calendar</a>
+      <a class="nav-link" href="#/dashboard" data-route="dashboard"><span class="nav-symbol bi-icon bi-speedometer2" aria-hidden="true"></span>Dashboard</a>
+      <a class="nav-link" href="#/courses" data-route="courses"><span class="nav-symbol bi-icon bi-journal-text" aria-hidden="true"></span>Courses & Events</a>
+      <a class="nav-link" href="#/attendance" data-route="attendance"><span class="nav-symbol bi-icon bi-clipboard-check" aria-hidden="true"></span>Attendance</a>
+      <a class="nav-link" href="#/calendar" data-route="calendar"><span class="nav-symbol bi-icon bi-calendar3" aria-hidden="true"></span>Calendar</a>
       <div class="nav-caption mt-4">FINANCES</div>
-      <a class="nav-link" href="#/fines" data-route="fines"><span class="nav-symbol">⚑</span>Fines & Absences</a>
-      <a class="nav-link" href="#/bills" data-route="bills"><span class="nav-symbol">▧</span>Bayronon / Bills</a>
-      <a class="nav-link" href="#/payments" data-route="payments"><span class="nav-symbol">⇄</span>Payments</a>
+      <a class="nav-link" href="#/fines" data-route="fines"><span class="nav-symbol bi-icon bi-cash-coin" aria-hidden="true"></span>Fines & Absences</a>
+      <a class="nav-link" href="#/bills" data-route="bills"><span class="nav-symbol bi-icon bi-receipt" aria-hidden="true"></span>Bills & Fees</a>
+      <a class="nav-link" href="#/payments" data-route="payments"><span class="nav-symbol bi-icon bi-credit-card" aria-hidden="true"></span>Payments</a>
       <div class="nav-caption mt-4">TOOLS</div>
-      <a class="nav-link" href="#/reports" data-route="reports"><span class="nav-symbol">▥</span>Reports</a>
-      <a class="nav-link" href="#/settings" data-route="settings"><span class="nav-symbol">⚙</span>Settings & Backup</a>
+      <a class="nav-link" href="#/reports" data-route="reports"><span class="nav-symbol bi-icon bi-graph-up" aria-hidden="true"></span>Reports</a>
+      <a class="nav-link" href="#/settings" data-route="settings"><span class="nav-symbol bi-icon bi-gear" aria-hidden="true"></span>Settings & Backup</a>
     </nav>
     <div class="sidebar-bottom"><div class="privacy-dot"></div><div><strong>Private by default</strong><small>Data stays in this browser</small></div></div>
   </aside>
   <div class="main-area">
     <header class="topbar">
-      <div class="d-flex align-items-center gap-3"><button class="btn btn-outline-secondary d-lg-none mobile-menu-trigger" id="menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false">☰</button><div><div class="topbar-eyebrow">YOUR PERSONAL WORKSPACE</div><div class="topbar-title" id="workspace-name">My Workspace</div></div></div>
-      <div class="d-flex gap-2 align-items-center"><span class="connection-pill" id="connection-status">● Local first</span><button type="button" class="btn btn-primary btn-sm btn-quick" id="quick-attendance">+ Log attendance</button><button type="button" class="btn btn-outline-secondary btn-sm btn-logout" id="logout-button">Log out</button></div>
+      <div class="d-flex align-items-center gap-3"><button class="btn btn-outline-secondary d-lg-none mobile-menu-trigger" id="menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false"><span class="bi-icon bi-list" aria-hidden="true"></span></button><div><div class="topbar-eyebrow">YOUR PERSONAL WORKSPACE</div><div class="topbar-title" id="workspace-name">My Workspace</div></div></div>
+      <div class="d-flex gap-2 align-items-center"><span class="connection-pill" id="connection-status">● Local first</span><button type="button" class="btn btn-primary btn-sm btn-quick" id="quick-attendance"><span class="bi-icon bi-plus-circle" aria-hidden="true"></span> Log attendance</button><button type="button" class="btn btn-outline-secondary btn-sm btn-logout" id="logout-button"><span class="bi-icon bi-box-arrow-right" aria-hidden="true"></span> Log out</button></div>
     </header>
     <main id="app-view" class="content-wrap" tabindex="-1"><div class="spinner-border text-primary" role="status" aria-label="Loading"></div></main>
-    <footer class="app-footer">Trackerist 2.6 <span>•</span> Offline-first <span>•</span> Browser-local data</footer>
+    <footer class="app-footer">Trackerist 2.9 <span>•</span> Offline-first <span>•</span> Browser-local data</footer>
   </div>
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile shortcuts">
-    <a href="#/dashboard" data-route="dashboard" class="mobile-tab"><span class="mobile-tab-icon" aria-hidden="true">▦</span><span>Home</span></a>
-    <a href="#/attendance" data-route="attendance" class="mobile-tab"><span class="mobile-tab-icon" aria-hidden="true">✓</span><span>Logs</span></a>
-    <a href="#/calendar" data-route="calendar" class="mobile-tab"><span class="mobile-tab-icon" aria-hidden="true">▦</span><span>Calendar</span></a>
-    <a href="#/fines" data-route="fines" class="mobile-tab"><span class="mobile-tab-icon" aria-hidden="true">₱</span><span>Fines</span></a>
-    <button type="button" class="mobile-tab" id="mobile-more" aria-controls="sidebar" aria-expanded="false"><span class="mobile-tab-icon" aria-hidden="true">☰</span><span>More</span></button>
+    <a href="#/dashboard" data-route="dashboard" class="mobile-tab"><span class="mobile-tab-icon bi-icon bi-house-door-fill" aria-hidden="true"></span><span>Home</span></a>
+    <a href="#/attendance" data-route="attendance" class="mobile-tab"><span class="mobile-tab-icon bi-icon bi-journal-check" aria-hidden="true"></span><span>Logs</span></a>
+    <a href="#/calendar" data-route="calendar" class="mobile-tab"><span class="mobile-tab-icon bi-icon bi-calendar3" aria-hidden="true"></span><span>Calendar</span></a>
+    <a href="#/fines" data-route="fines" class="mobile-tab"><span class="mobile-tab-icon bi-icon bi-cash-coin" aria-hidden="true"></span><span>Fines</span></a>
+    <button type="button" class="mobile-tab" id="mobile-more" aria-controls="sidebar" aria-expanded="false"><span class="mobile-tab-icon bi-icon bi-three-dots" aria-hidden="true"></span><span>More</span></button>
   </nav>
 </div>
 <div class="modal fade" id="editor-modal" tabindex="-1" aria-labelledby="editor-modal-title" aria-hidden="true">
