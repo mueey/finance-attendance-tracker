@@ -38,10 +38,34 @@ return `${pageHead('Overview','Your attendance, at a glance','Keep track of sess
   </div>
  </div></div></div>
 </section>
-<section class="card semester-summary mb-4" aria-label="Semester financial summary">
+<div class="card mb-4"><div class="card-header d-flex justify-content-between align-items-center"><span>Today's scheduled classes &amp; events</span><button class="link-button small" id="dashboard-calendar">Open calendar</button></div><div class="card-body pt-2">${todaysClasses.length?`<div class="row g-3">${todaysClasses.map(({course,record})=>`<div class="col-lg-6"><div class="dashboard-today d-flex flex-wrap justify-content-between align-items-center gap-2"><div><strong>${html(course.name)}</strong><div class="mini-muted">${html(course.time||'Time not set')} · ${record?chip(record.status):'<span class="chip chip-pending">Pending</span>'}</div></div>${course.type==='event'?`<div class="d-flex flex-column gap-1"><div class="mini-muted">${record?.slots?(()=>{const n=countEventSlots(record.slots,record.status);return `${n.absent} Absent slots · ${n.excused} Excused`})():'Select individual time slots'}</div><button class="btn btn-sm btn-outline-primary" data-today-event="${html(course.id)}">Set AM/PM slots</button></div>`:
+ `<div class="attendance-quick-actions"><button class="btn btn-sm ${record?.status==='present'?'btn-success':'btn-outline-success'}" data-today-mark="present" data-course="${html(course.id)}">Present</button><button class="btn btn-sm ${record?.status==='absent'?'btn-danger':'btn-outline-danger'}" data-today-mark="absent" data-course="${html(course.id)}">Absent</button><button class="btn btn-sm ${record?.status==='excused'?'btn-warning':'btn-outline-warning'}" data-today-mark="excused" data-course="${html(course.id)}">Excused</button></div>`}</div></div>`).join('')}</div>`:blank('No scheduled classes today','Choose meeting weekdays in Courses & Events to populate the calendar automatically.')}</div></div>
+<section class="card semester-hub mb-4" aria-label="Semester summaries">
+ <div class="card-body">
+  <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+   <div><div class="page-kicker mb-1">SEMESTER SUMMARIES</div><h2 class="section-title mb-1">Your semester overview</h2><p class="mini-muted mb-0">Choose a semester. Tap either card to view the complete details.</p></div>
+   <div class="semester-controls">
+    <div><label for="dashboard-semester-select" class="form-label mb-1">Semester</label><select class="form-select semester-picker" id="dashboard-semester-select">${semesterOptions(s).map(([value,label])=>`<option value="${html(value)}" ${value===term?'selected':''}>${html(label)}</option>`).join('')}</select></div>
+    <div class="d-flex flex-wrap gap-2"><button type="button" class="btn btn-outline-primary btn-sm" id="semester-add">+ Add semester</button><button type="button" class="btn btn-light btn-sm" id="semester-edit" ${term==='all'?'disabled':''}>Edit</button><button type="button" class="btn btn-outline-danger btn-sm" id="semester-delete" ${term==='all'?'disabled':''}>Delete</button></div>
+   </div>
+  </div>
+  <div class="row g-3">
+   <div class="col-md-6"><button type="button" class="semester-summary-launch" data-summary-open="financial" aria-haspopup="dialog" aria-controls="summary-modal">
+    <span class="semester-launch-heading"><span class="bi-icon bi-cash-coin" aria-hidden="true"></span><strong>Semester Financial Summary</strong></span>
+    <span class="semester-launch-primary"><span><span class="mini-muted">Total paid</span><strong>${money(semesterSummary.paid)}</strong></span><span><span class="mini-muted">Remaining</span><strong class="text-due">${money(semesterSummary.due)}</strong></span></span>
+    <span class="semester-launch-action">View financial details <span class="bi-icon bi-chevron-down" aria-hidden="true"></span></span>
+   </button></div>
+   <div class="col-md-6"><button type="button" class="semester-summary-launch" data-summary-open="attendance" aria-haspopup="dialog" aria-controls="summary-modal">
+    <span class="semester-launch-heading"><span class="bi-icon bi-journal-check" aria-hidden="true"></span><strong>Semester Attendance Summary</strong></span>
+    <span class="semester-launch-attendance">${attendanceRing(semesterAttendance.rate,{label:'Semester attendance rate',size:'semester'})}<span class="semester-launch-counts"><span class="mini-muted">${semesterAttendance.present} Present · ${semesterAttendance.absent} Absent</span><span class="mini-muted">${semesterAttendance.excused} Excused · ${semesterAttendance.pendingDates} Pending</span></span></span>
+    <span class="semester-launch-action">View attendance details <span class="bi-icon bi-chevron-down" aria-hidden="true"></span></span>
+   </button></div>
+  </div>
+ </div>
+</section>
+<template id="semester-financial-detail-template"><section class="card semester-summary mb-0" aria-label="Semester financial summary">
  <div class="card-body pb-2"><div class="d-flex flex-wrap align-items-start justify-content-between gap-3">
   <div><div class="page-kicker mb-2">SEMESTER FINANCIAL SUMMARY</div><h2 class="section-title mb-1">Charges &amp; payments by semester</h2><p class="mini-muted mb-0">${termDetails?`${html(termDetails.startDate)} to ${html(termDetails.endDate)} · ${html(termDetails.name)}`:'All recorded attendance fines, bills, and payments'}</p></div>
-  <div class="d-flex flex-wrap align-items-end gap-2"><div><label for="dashboard-semester-select" class="form-label mb-1">Choose semester for both summaries</label><select class="form-select semester-picker" id="dashboard-semester-select">${semesterOptions(s).map(([value,label])=>`<option value="${html(value)}" ${value===term?'selected':''}>${html(label)}</option>`).join('')}</select></div><button type="button" class="btn btn-outline-primary" id="semester-add">+ Add</button><button type="button" class="btn btn-light" id="semester-edit" ${term==='all'?'disabled':''}>Edit</button><button type="button" class="btn btn-outline-danger" id="semester-delete" ${term==='all'?'disabled':''}>Delete</button></div>
  </div></div>
  <div class="card-body pt-2"><div class="row g-3">
   <div class="col-6 col-xl-3"><div class="semester-metric"><div class="metric-label">Total charges</div><div class="semester-amount">${money(semesterSummary.charged)}</div><div class="metric-note">Fines + other fees</div></div></div>
@@ -53,7 +77,8 @@ return `${pageHead('Overview','Your attendance, at a glance','Keep track of sess
  ${!s.semesters.length?'<div class="insight mt-3">No semesters configured yet. Click <strong>+ Add</strong> and enter your school semester name, start date, and end date.</div>':''}
  </div>
 </section>
-<section class="card semester-summary semester-attendance mb-4" aria-label="Semester attendance summary">
+</template>
+<template id="semester-attendance-detail-template"><section class="card semester-summary semester-attendance mb-0" aria-label="Semester attendance summary">
  <div class="card-body">
   <div class="d-flex flex-wrap align-items-start justify-content-between gap-2 mb-3">
    <div><div class="page-kicker mb-2">SEMESTER ATTENDANCE SUMMARY</div><h2 class="section-title mb-1">Attendance for ${termDetails?html(termDetails.name):'all dates'}</h2><p class="mini-muted mb-0">Based on attendance logs; unlogged scheduled dates stay Pending, never automatically Absent.</p></div>
@@ -83,13 +108,41 @@ return `${pageHead('Overview','Your attendance, at a glance','Keep track of sess
   </div>
  </div>
 </section>
-<div class="card mb-4"><div class="card-header d-flex justify-content-between align-items-center"><span>Today's scheduled classes &amp; events</span><button class="link-button small" id="dashboard-calendar">Open calendar</button></div><div class="card-body pt-2">${todaysClasses.length?`<div class="row g-3">${todaysClasses.map(({course,record})=>`<div class="col-lg-6"><div class="dashboard-today d-flex flex-wrap justify-content-between align-items-center gap-2"><div><strong>${html(course.name)}</strong><div class="mini-muted">${html(course.time||'Time not set')} · ${record?chip(record.status):'<span class="chip chip-pending">Pending</span>'}</div></div>${course.type==='event'?`<div class="d-flex flex-column gap-1"><div class="mini-muted">${record?.slots?(()=>{const n=countEventSlots(record.slots,record.status);return `${n.absent} Absent slots · ${n.excused} Excused`})():'Select individual time slots'}</div><button class="btn btn-sm btn-outline-primary" data-today-event="${html(course.id)}">Set AM/PM slots</button></div>`:
- `<div class="attendance-quick-actions"><button class="btn btn-sm ${record?.status==='present'?'btn-success':'btn-outline-success'}" data-today-mark="present" data-course="${html(course.id)}">Present</button><button class="btn btn-sm ${record?.status==='absent'?'btn-danger':'btn-outline-danger'}" data-today-mark="absent" data-course="${html(course.id)}">Absent</button><button class="btn btn-sm ${record?.status==='excused'?'btn-warning':'btn-outline-warning'}" data-today-mark="excused" data-course="${html(course.id)}">Excused</button></div>`}</div></div>`).join('')}</div>`:blank('No scheduled classes today','Choose meeting weekdays in Courses & Events to populate the calendar automatically.')}</div></div>
+</template>
 <div class="row g-3"><div class="col-xl-7"><div class="card h-100"><div class="card-header d-flex justify-content-between"><span>Recent attendance</span><button class="link-button small" id="dashboard-log">View all</button></div><div class="card-body pt-2">${recent.length?`<div class="table-wrap"><table class="table"><tbody>${recent.map(a=>`<tr><td class="mono small">${friendlyDate(a.date)}</td><td>${html(courses.get(a.courseId)||'Unknown')}</td><td class="text-end">${chip(a.status)}</td></tr>`).join('')}</tbody></table></div>`:blank('No records yet','Use Log attendance to add one.')}</div></div></div><div class="col-xl-5"><div class="card h-100"><div class="card-header d-flex justify-content-between"><span>Outstanding bills</span><button class="link-button small" id="dashboard-bills">View bills</button></div><div class="card-body pt-2">${bills.length?bills.map(b=>`<div class="d-flex justify-content-between border-bottom py-3 gap-3"><div><strong>${html(b.title)}</strong><div class="mini-muted">${b.dueDate?`Due ${friendlyDate(b.dueDate)}`:'No due date'} ${b.dueDate&&b.dueDate<today()?'<span class="text-due"> · OVERDUE</span>':''}</div></div><strong class="text-due mono">${money(Math.max(0,billBalance(b,s)))}</strong></div>`).join(''):blank('All clear','No unpaid bills currently.')}</div></div></div></div>`;}
-export function bind(){const picker=document.querySelector('#dashboard-semester-select');if(picker)picker.onchange=()=>update(s=>{s.settings.selectedSemesterId=picker.value;});
-const subjectPanel=document.querySelector('#semester-subject-collapse');
-if(subjectPanel){
- subjectPanel.addEventListener('show.bs.collapse',()=>{subjectListExpanded=true;});
- subjectPanel.addEventListener('hide.bs.collapse',()=>{subjectListExpanded=false;});
+export function bind(){
+ const picker=document.querySelector('#dashboard-semester-select');
+ if(picker)picker.onchange=()=>update(s=>{s.settings.selectedSemesterId=picker.value;});
+ const summaryModal=document.querySelector('#summary-modal');
+ const summaryBody=document.querySelector('#summary-modal-body');
+ const summaryTitle=document.querySelector('#summary-modal-title');
+ document.querySelectorAll('[data-summary-open]').forEach(button=>button.addEventListener('click',()=>{
+  const type=button.dataset.summaryOpen;
+  const template=document.querySelector(`#semester-${type==='financial'?'financial':'attendance'}-detail-template`);
+  if(!template)return;
+  summaryTitle.textContent=type==='financial'?'Semester Financial Summary':'Semester Attendance Summary';
+  summaryBody.innerHTML=template.innerHTML;
+  summaryBody.scrollTop=0;
+  const subjectPanel=summaryBody.querySelector('#semester-subject-collapse');
+  if(subjectPanel){
+   subjectPanel.addEventListener('show.bs.collapse',()=>{subjectListExpanded=true;});
+   subjectPanel.addEventListener('hide.bs.collapse',()=>{subjectListExpanded=false;});
+  }
+  const logs=summaryBody.querySelector('#semester-attendance-logs');
+  if(logs)logs.onclick=()=>{
+   summaryModal.addEventListener('hidden.bs.modal',()=>changeRoute('attendance'),{once:true});
+   bootstrap.Modal.getOrCreateInstance(summaryModal).hide();
+  };
+  bootstrap.Modal.getOrCreateInstance(summaryModal).show();
+ }));
+ captureClick('semester-add',()=>openSemesterEditor());
+ captureClick('semester-edit',()=>{const id=getState().settings.selectedSemesterId,sem=getState().semesters.find(x=>x.id===id);if(sem)openSemesterEditor(sem);});
+ captureClick('semester-delete',()=>{const id=getState().settings.selectedSemesterId,sem=getState().semesters.find(x=>x.id===id);if(sem)deleteSemester(sem);});
+ captureClick('dashboard-add',()=>document.getElementById('quick-attendance').click());
+ captureClick('dashboard-payment',()=>changeRoute('payments'));
+ captureClick('dashboard-calendar',()=>changeRoute('calendar'));
+ document.querySelectorAll('[data-today-mark]').forEach(button=>button.onclick=()=>{try{markAttendance(button.dataset.course,today(),button.dataset.todayMark);toast('Attendance saved');}catch(err){toast(err.message,true);}});
+ document.querySelectorAll('[data-today-event]').forEach(button=>button.onclick=()=>{const date=today(),record=getState().attendance.find(a=>a.courseId===button.dataset.todayEvent&&a.date===date);openAttendanceEditor(record||null,{courseId:button.dataset.todayEvent,date});});
+ captureClick('dashboard-log',()=>changeRoute('attendance'));
+ captureClick('dashboard-bills',()=>changeRoute('bills'));
 }
-captureClick('semester-attendance-logs',()=>changeRoute('attendance'));captureClick('semester-add',()=>openSemesterEditor());captureClick('semester-edit',()=>{const id=getState().settings.selectedSemesterId,sem=getState().semesters.find(x=>x.id===id);if(sem)openSemesterEditor(sem);});captureClick('semester-delete',()=>{const id=getState().settings.selectedSemesterId,sem=getState().semesters.find(x=>x.id===id);if(sem)deleteSemester(sem);});captureClick('dashboard-add',()=>document.getElementById('quick-attendance').click());captureClick('dashboard-payment',()=>changeRoute('payments'));captureClick('dashboard-calendar',()=>changeRoute('calendar'));document.querySelectorAll('[data-today-mark]').forEach(button=>button.onclick=()=>{try{markAttendance(button.dataset.course,today(),button.dataset.todayMark);toast('Attendance saved');}catch(err){toast(err.message,true);}});document.querySelectorAll('[data-today-event]').forEach(button=>button.onclick=()=>{const date=today(),record=getState().attendance.find(a=>a.courseId===button.dataset.todayEvent&&a.date===date);openAttendanceEditor(record||null,{courseId:button.dataset.todayEvent,date});});captureClick('dashboard-log',()=>changeRoute('attendance'));captureClick('dashboard-bills',()=>changeRoute('bills'));}

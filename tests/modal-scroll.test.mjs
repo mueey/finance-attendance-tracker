@@ -22,7 +22,7 @@ test('scrolling stays confined to modal body, with visible footer and mobile hei
  assert.match(css,/\.sidebar\{overflow-y:auto/);
 });
 test('service worker uses a new cache for the mobile UI update',()=>{
- assert.match(sw,/trackerist-v2\.9\.0/);
+ assert.match(sw,/trackerist-v3\.0\.0/);
  assert.match(sw,/\.\/css\/app\.css/);
  assert.match(sw,/\.\/index\.html/);
  assert.match(sw,/\.\/js\/core\/ui\.js/);

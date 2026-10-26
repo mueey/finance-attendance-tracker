@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#12253c">
   <meta name="description" content="Offline attendance, fines, bills, and payment tracker">
-  <title>Trackerist 2.9 • Attendance & Finance</title>
+  <title>Trackerist 3.0 • Attendance & Finance</title>
   <link rel="icon" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="vendor/bootstrap.min.css">
@@ -58,7 +58,7 @@
       <div class="d-flex gap-2 align-items-center"><span class="connection-pill" id="connection-status">● Local first</span><button type="button" class="btn btn-primary btn-sm btn-quick" id="quick-attendance"><span class="bi-icon bi-plus-circle" aria-hidden="true"></span> Log attendance</button><button type="button" class="btn btn-outline-secondary btn-sm btn-logout" id="logout-button"><span class="bi-icon bi-box-arrow-right" aria-hidden="true"></span> Log out</button></div>
     </header>
     <main id="app-view" class="content-wrap" tabindex="-1"><div class="spinner-border text-primary" role="status" aria-label="Loading"></div></main>
-    <footer class="app-footer">Trackerist 2.9 <span>•</span> Offline-first <span>•</span> Browser-local data</footer>
+    <footer class="app-footer">Trackerist 3.0 <span>•</span> Offline-first <span>•</span> Browser-local data</footer>
   </div>
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile shortcuts">
     <a href="#/dashboard" data-route="dashboard" class="mobile-tab"><span class="mobile-tab-icon bi-icon bi-house-door-fill" aria-hidden="true"></span><span>Home</span></a>
@@ -83,6 +83,18 @@
         <button type="submit" class="btn btn-primary" id="editor-submit">Save changes</button>
       </div>
     </form>
+  </div>
+</div>
+<div class="modal fade" id="summary-modal" tabindex="-1" aria-labelledby="summary-modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable modal-fullscreen-sm-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="summary-modal-title">Semester Summary</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="summary-modal-body" tabindex="0"></div>
+      <div class="modal-footer"><button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button></div>
+    </div>
   </div>
 </div>
 <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-host" aria-live="polite"></div>

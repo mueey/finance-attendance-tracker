@@ -99,3 +99,76 @@ body[data-theme=dark] .semester-subject-toggle:hover{background:#273a53}
 @media(prefers-reduced-motion:reduce){.semester-subject-toggle .semester-chevron{transition:none}}
 
 .semester-subject-toggle[aria-expanded="true"] .semester-expand-closed,.semester-subject-toggle[aria-expanded="false"] .semester-expand-open{display:none}
+
+/* 3.0: Attendance chooser is searchable and nested-scroll friendly on phones. */
+.attendance-course-picker{min-width:0}
+.attendance-selected-course{margin:10px 0 8px;background:#f0f5ff;color:#253d64;border:1px solid #dce5f6;border-radius:9px;padding:10px 12px;font-size:.83rem;overflow-wrap:anywhere}
+.attendance-course-results{max-height:210px;min-height:58px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:10px;background:var(--bs-body-bg,#fff);scrollbar-gutter:stable}
+.attendance-course-option{width:100%;background:transparent;border:0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;color:var(--ink);padding:12px 14px;min-height:54px}
+.attendance-course-option:last-child{border-bottom:0}
+.attendance-course-option:hover,.attendance-course-option:focus-visible{background:#f1f5ff}
+.attendance-course-option.is-selected{background:#e8f0ff;color:#234ca5}
+.attendance-course-option .bi-icon{width:18px;height:18px}
+.course-option-info{display:grid;gap:3px;min-width:0;overflow-wrap:anywhere}
+.attendance-course-empty{padding:18px 12px;color:var(--muted);font-size:.85rem}
+body[data-theme=dark] .attendance-selected-course{background:#273c58;border-color:#455b76;color:#e4ebff}
+body[data-theme=dark] .attendance-course-option.is-selected,body[data-theme=dark] .attendance-course-option:hover,body[data-theme=dark] .attendance-course-option:focus-visible{background:#283e61;color:#e4ebff}
+@media(max-width:575.98px){.attendance-course-results{max-height:min(33dvh,205px)}.attendance-course-option{min-height:48px;padding:10px 12px}}
+
+/* 3.0: Two compact semester previews open separate scrollable Bootstrap pop-ups. */
+.semester-controls{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px}
+.semester-controls .form-select{max-width:100%}
+.semester-summary-launch{width:100%;height:100%;min-height:186px;display:flex;flex-direction:column;text-align:left;gap:16px;color:var(--ink);background:var(--bs-body-bg,#fff);border:1px solid var(--border);border-radius:13px;padding:17px 18px;box-shadow:0 2px 8px rgba(10,30,60,.025)}
+.semester-summary-launch:hover{border-color:#81a2ed;background:#f8faff}
+.semester-summary-launch:focus-visible{outline:3px solid #82aaff;outline-offset:2px}
+.semester-launch-heading{display:flex;align-items:center;gap:10px;font-size:.96rem}
+.semester-launch-heading .bi-icon{width:21px;height:21px;color:#4065db}
+.semester-launch-primary{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.semester-launch-primary>span{display:grid;gap:3px}
+.semester-launch-primary strong{font-size:clamp(1.15rem,2.7vw,1.5rem);font-weight:850;overflow-wrap:anywhere}
+.semester-launch-attendance{display:flex;align-items:center;gap:14px}
+.semester-launch-attendance .attendance-ring{width:80px;max-width:80px;margin:0}
+.semester-launch-attendance .attendance-ring-value{font-size:1.16rem}
+.semester-launch-attendance .attendance-ring-center span{font-size:.56rem}
+.semester-launch-counts{display:grid;gap:6px;overflow-wrap:anywhere}
+.semester-launch-action{display:flex;align-items:center;gap:7px;color:#2f57c1;font-size:.82rem;font-weight:750;margin-top:auto}
+.semester-launch-action .bi-icon{transform:rotate(-90deg);width:15px;height:15px}
+body[data-theme=dark] .semester-summary-launch{background:#1c2b40;color:var(--ink)}
+body[data-theme=dark] .semester-summary-launch:hover{background:#293e5d}
+#summary-modal .modal-content{min-height:0;display:flex;flex-direction:column}
+#summary-modal .modal-header,#summary-modal .modal-footer{flex-shrink:0}
+#summary-modal .modal-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#summary-modal .modal-body>.semester-summary{border:0;box-shadow:none}
+#summary-modal .modal-body>.semester-summary>.card-body{padding:8px 2px 16px}
+#summary-modal .modal-footer{padding-bottom:max(13px,env(safe-area-inset-bottom,0px))}
+@media(max-width:575.98px){
+ .semester-controls{width:100%}
+ .semester-controls>div:first-child{width:100%}
+ .semester-summary-launch{min-height:158px;padding:14px}
+ #summary-modal .modal-dialog{height:100dvh;margin:0}
+ #summary-modal .modal-content{height:100%;max-height:100dvh;border-radius:0}
+ #summary-modal .modal-body{padding:13px 15px 30px}
+ #summary-modal .modal-footer .btn{min-height:44px;flex:1}
+}
+/* Phone summary launchers are intentionally short rows; complete details live in pop-ups. */
+@media(max-width:575.98px){
+ .semester-hub .card-body{padding:13px}
+ .semester-hub .semester-controls{gap:8px}
+ .semester-hub .semester-controls .form-label{font-size:.7rem}
+ .semester-hub .semester-controls .btn{font-size:.74rem;padding:6px 9px}
+ .semester-summary-launch{display:grid;grid-template-columns:minmax(0,1fr) 20px;grid-template-rows:auto auto;align-items:center;gap:5px 8px;min-height:82px;padding:11px 12px}
+ .semester-launch-heading{grid-column:1;grid-row:1;font-size:.84rem;gap:7px}
+ .semester-launch-heading .bi-icon{width:17px;height:17px}
+ .semester-launch-primary{grid-column:1;grid-row:2;gap:4px 10px;justify-content:flex-start}
+ .semester-launch-primary>span{display:flex;align-items:baseline;gap:5px}
+ .semester-launch-primary strong{font-size:.87rem;letter-spacing:0}
+ .semester-launch-primary .mini-muted{font-size:.68rem}
+ .semester-launch-attendance{grid-column:1;grid-row:2;gap:8px}
+ .semester-launch-attendance .attendance-ring{width:38px;max-width:38px}
+ .semester-launch-attendance .attendance-ring-value{font-size:.79rem;letter-spacing:-.4px}
+ .semester-launch-attendance .attendance-ring-center span{display:none}
+ .semester-launch-counts{gap:2px}
+ .semester-launch-counts .mini-muted{font-size:.68rem}
+ .semester-launch-action{grid-column:2;grid-row:1 / span 2;font-size:0;justify-self:end;margin:0}
+ .semester-launch-action .bi-icon{width:17px;height:17px}
+}

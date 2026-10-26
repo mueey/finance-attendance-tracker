@@ -33,7 +33,7 @@ test('dashboard order: snapshot and health precede the financial and attendance 
  const labels=['FINANCIAL SNAPSHOT','Attendance health','SEMESTER FINANCIAL SUMMARY','SEMESTER ATTENDANCE SUMMARY'];
  let last=-1;for(const label of labels){const index=out.indexOf(label);assert.ok(index>last,label);last=index;}
  assert.equal((out.match(/FINANCIAL SNAPSHOT/g)||[]).length,1);
- assert.equal((out.match(/<div class="attendance-ring /g)||[]).length,2);
+ assert.equal((out.match(/<div class="attendance-ring /g)||[]).length,3); // overall + compact preview + detail popup
  assert.match(out,/aria-label="Overall recorded attendance: No recorded attendance, target 75%"/);
  assert.match(out,/aria-label="Semester attendance rate: No recorded attendance"/);
  assert.doesNotMatch(out,/aria-label="Semester attendance percentage"/);

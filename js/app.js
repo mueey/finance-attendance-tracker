@@ -31,7 +31,7 @@ function draw(){
  const route=location.hash.replace(/^#\//,'').split(/[?#]/)[0],page=modules[route]?route:'dashboard';
  renderSettings();moreButton?.classList.toggle('active',!['dashboard','attendance','calendar','fines'].includes(page));document.querySelectorAll('[data-route]').forEach(a=>{const active=a.dataset.route===page;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
  view.onclick=null;view.innerHTML=modules[page].render();view.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('href',`#/${a.dataset.route}`));modules[page].bind();
- document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 2.9`;closeSidebar();
+ document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 3.0`;closeSidebar();
 }
 function connection(){const x=document.querySelector('#connection-status');if(!x)return;x.textContent=navigator.onLine?'● Ready offline':'● Offline mode';x.classList.toggle('offline',!navigator.onLine);}
 function fatal(err){view.innerHTML='<div class="card"><div class="card-body"><h1 class="fs-4 text-danger">Unable to load Trackerist data</h1><p id="fatal-message"></p><p>Your browser data was not intentionally reset. Check storage permissions or recover from a prior JSON backup.</p></div></div>';view.querySelector('#fatal-message').textContent=err.message||String(err);}
@@ -65,7 +65,7 @@ function start(){
   finally{submit.disabled=false;}
  };
  document.querySelector('#auth-show-password').onchange=e=>{document.querySelector('#auth-password').type=e.target.checked?'text':'password';document.querySelector('#auth-confirm').type=e.target.checked?'text':'password';};
- document.querySelector('#logout-button').onclick=()=>{signOut();view.innerHTML='';const instance=bootstrap.Modal.getInstance(document.querySelector('#editor-modal'));instance?.hide();showAuth();};
+ document.querySelector('#logout-button').onclick=()=>{signOut();view.innerHTML='';for(const modalId of ['editor-modal','summary-modal'])bootstrap.Modal.getInstance(document.getElementById(modalId))?.hide();showAuth();};
  document.querySelector('#quick-attendance').onclick=()=>attendance.openAttendanceEditor();
  menuButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('open'));
  moreButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('open'));

@@ -3,6 +3,7 @@ import {EVENT_SLOT_KEYS,EVENT_SLOT_LABELS,EVENT_SLOT_STATUSES,normalizeEventSlot
 import {getFinance} from '../core/finance.js';
 import {round2,id,today,html,money,field,selectField,optionList,chip,blank,pageHead,friendlyDate,validDate} from '../core/utils.js';
 import {editModal,confirmDelete,toast,captureClick} from '../core/ui.js';
+import {coursePickerMarkup,bindCoursePicker} from '../core/course-picker.js';
 const statusOptions=[['present','Present'],['absent','Absent'],['excused','Excused (no fine)'],['holiday','Holiday (excluded)']];
 const slotOptions=[['present','Present'],['absent','Absent — charge fine'],['excused','Excused — no fine']];
 export function openAttendanceEditor(record=null,defaults={}){
@@ -12,7 +13,7 @@ export function openAttendanceEditor(record=null,defaults={}){
  const defaultSlots=normalizeEventSlots(record?.slots,record?.status)||Object.fromEntries(EVENT_SLOT_KEYS.map(k=>[k,record?.status==='absent'?'absent':record?.status==='excused'?'excused':'present']));
  const slotInputs=EVENT_SLOT_KEYS.map(key=>`<div class="col-sm-6">${selectField('slot_'+key,EVENT_SLOT_LABELS[key],slotOptions,defaultSlots[key],'col-12')}</div>`).join('');
  editModal({title:record?'Edit attendance entry':'Log attendance',submit:record?'Update attendance':'Save attendance',body:`<div class="row g-3">
- ${selectField('courseId','Course or event',courses.map(c=>[c.id,`${c.name} (${c.type})`]),courseId)}
+ ${coursePickerMarkup(courses,courseId)}
  ${field('date','Date',record?.date||defaults.date||today(),{type:'date',required:true})}
  <div class="col-12" id="class-status">${selectField('status','Attendance status',statusOptions,record?.status||'present','col-12')}</div>
  <div class="col-12" id="event-status"><div class="card bg-light border-0"><div class="card-body">
@@ -57,7 +58,7 @@ export function openAttendanceEditor(record=null,defaults={}){
    const rate=Number(course?.fineRate||0);
    document.querySelector('#event-fine-preview').textContent=isEvent?`${missed} Absent slot${missed===1?'':'s'} × ${money(rate)} = ${money(round2(missed*rate))} total event fine${holiday?' (holiday: no fine)':''}`:'';
  }
- form.elements.courseId.onchange=sync;form.elements.eventDayType.onchange=sync;
+ bindCoursePicker(form,courses,sync);form.elements.eventDayType.onchange=sync;
  EVENT_SLOT_KEYS.forEach(key=>form.elements['slot_'+key].onchange=sync);
  sync();
 }
