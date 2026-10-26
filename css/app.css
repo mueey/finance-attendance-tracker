@@ -10,3 +10,48 @@ body[data-theme=dark] .calendar-cell.is-selected{background:#283e5d}body[data-th
 @media(max-width:750px){.auth-layout{grid-template-columns:1fr;max-width:520px}.auth-intro{padding:24px 28px;gap:9px}.auth-intro h1{font-size:1.5rem;margin:5px 0}.auth-intro p,.auth-bullet{display:none}.auth-panel{padding:30px 28px}.weekday-choice span{width:46px}.calendar-subject span{display:none}.calendar-more{display:none}}
 
 .dashboard-today{background:#f6f8fd;border:1px solid #e4eaf5;padding:14px 16px;border-radius:11px}body[data-theme=dark] .dashboard-today{background:#23344a;border-color:#374a60}
+
+/* 2.3: all feature editors share a true scrollable Bootstrap modal.
+   The form itself is .modal-content, so the body gets the remaining height
+   while header/footer remain available even on a small screen. */
+#editor-modal .modal-content{min-height:0;display:flex;flex-direction:column}
+#editor-modal .modal-header,#editor-modal .modal-footer{flex-shrink:0}
+#editor-modal .modal-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#editor-modal .modal-body:focus-visible{outline:2px solid #7fa1fb;outline-offset:-2px}
+#editor-modal .modal-footer{gap:8px;padding-bottom:max(12px,env(safe-area-inset-bottom))}
+#editor-modal .modal-footer>.btn{margin:0}
+/* The navigation must scroll on short phones instead of hiding the lower links. */
+.sidebar{overflow-y:auto;overscroll-behavior:contain}
+/* Avoid truncating header actions on narrow phones. */
+@media(max-width:575.98px){
+ #editor-modal .modal-dialog{height:100dvh}
+ #editor-modal .modal-content{height:100%;min-height:0;max-height:100dvh}
+ #editor-modal .modal-body{padding-bottom:24px}
+ #editor-modal .modal-footer>.btn{flex:1 1 120px}
+ .topbar{flex-wrap:wrap;gap:10px}
+ .topbar>div:last-child{flex-wrap:wrap}
+ .auth-shell{min-height:100dvh;align-items:flex-start}
+ .auth-layout{margin:auto 0}
+}
+
+/* 2.4: semester summary, responsive and accessible on mobile */
+.semester-summary{border:1px solid #dee6f4}
+.semester-picker{min-width:200px;max-width:min(100%,370px)}
+.semester-metric{height:100%;min-height:114px;border-radius:11px;background:#f5f7fc;padding:17px}
+.semester-amount{font-size:clamp(1.25rem,2vw,1.65rem);line-height:1.35;font-weight:850;letter-spacing:-.8px;overflow-wrap:anywhere;font-variant-numeric:tabular-nums;margin:7px 0}
+.semester-breakdown{background:#f7f9fc;border-radius:9px;padding:12px 15px;font-size:.82rem;color:#607186}
+.semester-breakdown strong{color:#283b56}
+body[data-theme=dark] .semester-metric,body[data-theme=dark] .semester-breakdown{background:#23344a;color:#bfcee2}
+body[data-theme=dark] .semester-breakdown strong{color:#e2ecf8}
+@media(max-width:575px){.semester-summary .card-body{padding:16px}.semester-picker{min-width:0;width:100%}.semester-metric{padding:12px;min-height:105px}.semester-amount{font-size:1.2rem;letter-spacing:-.3px}.semester-summary .metric-note{font-size:.71rem}}
+
+/* 2.5: attendance summary shares the term selector with finances */
+.semester-attendance .semester-rate .progress{height:8px;background:#e5ebf3}
+.semester-attendance .semester-rate .progress-bar{background:#27b694}
+.semester-attendance .semester-rate .semester-amount{font-size:clamp(1.6rem,3vw,2rem)}
+.semester-course-table{max-height:310px;overflow-y:auto;overscroll-behavior:contain;border:1px solid #e8edf3;border-radius:9px}
+.semester-course-table thead{position:sticky;top:0;z-index:1;background:var(--bs-body-bg,#fff)}
+.semester-course-table table{min-width:610px}
+.semester-course-table th,.semester-course-table td{padding:10px 12px;white-space:nowrap}
+.semester-course-table th:first-child,.semester-course-table td:first-child{min-width:145px;white-space:normal}
+@media(max-width:575px){.semester-attendance .semester-metric{min-height:100px}.semester-attendance .semester-course-table{max-height:270px}}

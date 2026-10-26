@@ -6,7 +6,9 @@ export const refresh=()=>refreshHandler();
 export function editModal({title,body,submit='Save changes',onSave}){
  const host=document.querySelector('#editor-modal');
  document.querySelector('#editor-modal-title').textContent=title;
- document.querySelector('#editor-modal-body').innerHTML=body;
+ const editorBody=document.querySelector('#editor-modal-body');
+ editorBody.innerHTML=body;
+ editorBody.scrollTop=0; // opening a different editor must start at the first field
  document.querySelector('#editor-submit').textContent=submit;
  const form=document.querySelector('#editor-form');form.reset(); // values embedded in markup are now used as the form reset defaults
  form.onsubmit=e=>{e.preventDefault();if(!form.reportValidity())return;try{const data=Object.fromEntries(new FormData(form).entries());const result=onSave(data,form);if(result===false)return;bootstrap.Modal.getOrCreateInstance(host).hide();toast('Changes saved');refresh();}catch(err){toast(err.message||'Unable to save',true);}};

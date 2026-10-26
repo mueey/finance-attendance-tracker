@@ -1,6 +1,6 @@
 {
   "id": "./",
-  "name": "Trackerist 2.1 — Attendance & Finance",
+  "name": "Trackerist 2.7 — Attendance & Finance",
   "short_name": "Trackerist",
   "description": "Offline attendance tracker with automatic class schedules, local login, fines and payments",
   "start_url": "./index.html",

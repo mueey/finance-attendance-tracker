@@ -1,0 +1,18 @@
+/* SVG icon silhouettes derived from the Bootstrap Icons glyph set (MIT license). */
+.bi-icon{display:inline-block;width:1.1em;height:1.1em;flex:none;background-color:currentColor;vertical-align:-.125em;mask-image:var(--bi-icon);-webkit-mask-image:var(--bi-icon);mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-size:contain;-webkit-mask-size:contain;mask-position:center;-webkit-mask-position:center}
+.bi-speedometer2{--bi-icon:url("../vendor/bootstrap-icons/speedometer2.svg")}
+.bi-journal-text{--bi-icon:url("../vendor/bootstrap-icons/journal-text.svg")}
+.bi-clipboard-check{--bi-icon:url("../vendor/bootstrap-icons/clipboard-check.svg")}
+.bi-calendar3{--bi-icon:url("../vendor/bootstrap-icons/calendar3.svg")}
+.bi-cash-coin{--bi-icon:url("../vendor/bootstrap-icons/cash-coin.svg")}
+.bi-receipt{--bi-icon:url("../vendor/bootstrap-icons/receipt.svg")}
+.bi-credit-card{--bi-icon:url("../vendor/bootstrap-icons/credit-card.svg")}
+.bi-graph-up{--bi-icon:url("../vendor/bootstrap-icons/graph-up.svg")}
+.bi-gear{--bi-icon:url("../vendor/bootstrap-icons/gear.svg")}
+.bi-house-door-fill{--bi-icon:url("../vendor/bootstrap-icons/house-door-fill.svg")}
+.bi-journal-check{--bi-icon:url("../vendor/bootstrap-icons/journal-check.svg")}
+.bi-three-dots{--bi-icon:url("../vendor/bootstrap-icons/three-dots.svg")}
+.bi-list{--bi-icon:url("../vendor/bootstrap-icons/list.svg")}
+.bi-x-lg{--bi-icon:url("../vendor/bootstrap-icons/x-lg.svg")}
+.bi-plus-circle{--bi-icon:url("../vendor/bootstrap-icons/plus-circle.svg")}
+.bi-box-arrow-right{--bi-icon:url("../vendor/bootstrap-icons/box-arrow-right.svg")}

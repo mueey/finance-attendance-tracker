@@ -1,0 +1,170 @@
+/* Trackerist 2.7 — phone/tablet styles kept separate to simplify troubleshooting. */
+.mobile-bottom-nav{display:none}
+.sidebar-close{display:none}
+.app-shell,.main-area,.content-wrap,.card,.card-body,.page-head{min-width:0}
+.page-head > div:first-child{min-width:0}
+.page-title,.page-subtitle,.section-title,.card-header{overflow-wrap:anywhere}
+.table-wrap{max-width:100%;-webkit-overflow-scrolling:touch}
+.metric-value{overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.semester-summary .d-flex{min-width:0}
+/* Don't let long data and labels create a horizontal document scrollbar. */
+body{max-width:100%;overflow-x:hidden}
+button,a,input,select,textarea{touch-action:manipulation}
+button:focus-visible,a:focus-visible{outline:3px solid #8aafff;outline-offset:2px}
+
+@media(max-width:991.98px){
+  .app-shell{display:block;min-height:100dvh}
+  .main-area{min-height:100dvh;padding-bottom:calc(122px + env(safe-area-inset-bottom,0px))}
+  .sidebar-close{display:block;margin-left:auto;background:#2b4161;color:#fff;border:1px solid #52647e;border-radius:9px;min-width:38px;min-height:38px;font-size:1.35rem;line-height:1}
+  .brand{gap:10px;padding:0 8px}
+  .sidebar{width:min(305px,88vw);max-width:100vw;height:100dvh;min-height:100dvh;padding:24px 15px 32px;box-shadow:8px 0 35px rgba(10,23,43,.12)}
+  .sidebar.open{box-shadow:8px 0 40px rgba(10,23,43,.35)}
+  /* Floating bottom dock: never spans the full viewport edge-to-edge. */
+  .mobile-bottom-nav{
+    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:stretch;
+    position:fixed;bottom:calc(12px + env(safe-area-inset-bottom,0px));
+    left:50%;right:auto;transform:translateX(-50%);
+    width:min(480px,calc(100% - 24px));z-index:1020;
+    min-height:68px;padding:7px 8px;
+    background:rgba(255,255,255,.97);
+    box-shadow:0 12px 42px rgba(12,32,64,.22),0 1px 5px rgba(12,32,64,.07);
+    border:1px solid var(--border);border-radius:24px;
+  }
+  @supports((backdrop-filter:blur(15px)) or (-webkit-backdrop-filter:blur(15px))){
+    .mobile-bottom-nav{backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px)}
+  }
+  .mobile-tab{min-width:0;border:0;text-decoration:none;background:transparent;color:#65748d;
+    border-radius:17px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:5px;font-size:.67rem;font-weight:750;line-height:1.1;min-height:53px;padding:6px 2px}
+  .mobile-tab-icon{width:21px;height:21px;display:block}
+  .mobile-tab.active,.mobile-tab[aria-current="page"]{background:#eaf0ff;color:#2c56d9}
+  .mobile-tab:active{background:#dbe6ff}
+  .sidebar-backdrop:not([hidden]){z-index:1035}
+  .topbar{min-height:66px}
+  .content-wrap{max-width:100%}
+  .toast-container{bottom:calc(102px + env(safe-area-inset-bottom,0px))!important;max-width:100vw}
+  .page-head{align-items:stretch}
+  .page-head>.btn{align-self:flex-start}
+  .card-header{flex-wrap:wrap;gap:8px}
+  .modal{z-index:1055}
+}
+@media(max-width:767.98px){
+  .content-wrap{padding:19px 14px 24px}
+  .topbar{gap:10px}
+  .page-head{margin-bottom:18px}
+  .page-title{letter-spacing:-.6px}
+  .page-subtitle{font-size:.84rem}
+  .card-body{padding:16px}
+  .card-header{padding:16px 16px 8px}
+  .row{--bs-gutter-x:14px}
+  .metric{min-height:125px;padding:17px}
+  .metric-value{font-size:clamp(1.2rem,3vw,1.7rem);line-height:1.18}
+  .metric-icon{display:none}
+  .semester-summary .semester-breakdown{gap:8px!important}
+  .semester-summary .semester-breakdown span{flex:1 1 135px}
+  .filter-row>*{flex-basis:100%}
+  .filter-row .btn{width:100%}
+  .attendance-quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .attendance-quick-actions .btn{min-height:42px;white-space:normal;font-size:.8rem}
+  .calendar-day-course .btn{min-height:42px}
+  .weekday-grid{gap:6px}
+  .weekday-choice span{min-width:44px;min-height:42px}
+  .calendar-grid,.calendar-header{gap:3px}
+  .calendar-cell{min-height:57px;padding:5px 3px;border-radius:7px}
+  .calendar-subjects{margin-top:4px;display:flex;justify-content:center;flex-wrap:wrap;gap:3px}
+  .calendar-subject span{display:none}
+  .calendar-subject .cal-dot{width:7px;height:7px}
+  .calendar-more,.calendar-count{display:none}
+  .calendar-number{font-size:.78rem}
+  .calendar-header div{font-size:.62rem}
+  .calendar-cell.is-selected{box-shadow:inset 0 0 0 1px #365de0}
+  .auth-shell{min-height:100dvh;align-items:flex-start;padding:12px}
+  .auth-layout{margin:auto;border-radius:17px}
+  .auth-intro{padding:19px 20px}
+  .auth-panel{padding:23px 20px 26px}
+  .auth-panel .form-control{font-size:16px;min-height:47px}
+  #editor-modal .form-control,#editor-modal .form-select{font-size:16px;min-height:44px}
+  #editor-modal textarea.form-control{min-height:85px}
+  #editor-modal .modal-header{padding:13px 15px}
+  #editor-modal .modal-body{padding:15px 15px 24px;overscroll-behavior-y:contain}
+  #editor-modal .modal-footer{padding:10px 15px max(12px,env(safe-area-inset-bottom,0px))}
+  #editor-modal .modal-footer>.btn{min-height:44px}
+  .semester-picker{width:100%;max-width:100%}
+  .semester-course-table{-webkit-overflow-scrolling:touch}
+}
+@media(max-width:575.98px){
+  .topbar{display:flex;align-items:center;padding:11px 12px}
+  .topbar>div:first-child{min-width:0;flex:1 1 100%}
+  .topbar>div:last-child{width:100%;justify-content:space-between;flex-wrap:nowrap;gap:8px}
+  .topbar .btn-quick{flex:1;min-width:0;min-height:39px;font-size:.78rem}
+  .topbar .btn-logout{flex:0 0 auto;min-height:39px}
+  .mobile-menu-trigger{min-width:42px;min-height:42px}
+  .content-wrap{padding:14px 11px 26px}
+  .page-head>.btn{width:100%;min-height:43px}
+  .page-head{gap:12px}
+  .page-title{font-size:clamp(1.48rem,6vw,1.82rem)}
+  .card{border-radius:12px}
+  .card-body{padding:14px}
+  .card-header{padding:14px 14px 6px;font-size:.93rem}
+  .metric{min-height:110px;padding:13px}
+  .metric-label,.metric-note{font-size:.71rem;line-height:1.3}
+  .metric-value{font-size:clamp(1.08rem,4.7vw,1.5rem);line-height:1.23;margin:8px 0 5px}
+  .semester-metric{min-height:100px;padding:12px}
+  .semester-amount{font-size:clamp(1.05rem,4.6vw,1.32rem)}
+  .semester-attendance .semester-rate .semester-amount{font-size:1.6rem}
+  .semester-summary .d-flex.align-items-end>div:has(>.semester-picker){flex:1 1 100%}
+  .semester-summary .card-body>.d-flex>.d-flex{width:100%}
+  #editor-modal .modal-dialog{height:100dvh;margin:0}
+  #editor-modal .modal-content{border-radius:0}
+  #editor-modal .modal-footer{display:flex;flex-wrap:nowrap}
+  #editor-modal .modal-footer>.btn{min-width:0;flex:1}
+  .auth-intro h1{font-size:1.35rem}
+  /* Standalone finance and attendance data is easier to read as stacked records on phones. */
+  .table-wrap.mobile-stack-table{overflow:visible;border:0}
+  .mobile-stack-table table,.mobile-stack-table tbody{display:block;width:100%}
+  .mobile-stack-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+  .mobile-stack-table tbody{display:grid;gap:11px}
+  .mobile-stack-table tbody tr{display:block;background:var(--bs-body-bg,#fff);border:1px solid var(--border);border-radius:11px;padding:9px 13px;box-shadow:0 1px 7px rgba(17,36,66,.025)}
+  .mobile-stack-table tbody td{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:4px 8px;
+    border:0;padding:9px 0!important;white-space:normal;overflow-wrap:anywhere;text-align:right;max-width:100%;font-size:.85rem}
+  .mobile-stack-table tbody td:not(:last-child){border-bottom:1px solid var(--border)}
+  .mobile-stack-table tbody td::before{content:attr(data-label);display:block;flex:0 0 95px;text-align:left;
+    font-size:.72rem;text-transform:uppercase;letter-spacing:.35px;font-weight:800;color:#7d899c;padding-top:2px}
+  .mobile-stack-table tbody td>.mini-muted{flex:1 1 100%;text-align:right}
+  .mobile-stack-table tbody td>.d-flex{margin-left:auto;justify-content:flex-end;max-width:calc(100% - 90px);gap:6px!important}
+  .mobile-stack-table tbody td .btn{min-height:37px;padding:7px 9px;font-size:.78rem}
+  .mobile-stack-table tbody td .chip{white-space:normal;text-align:center}
+  .mobile-stack-table tbody td>strong{max-width:calc(100% - 99px)}
+  /* A summary comparison stays a real horizontally scrollable table. */
+  .semester-course-table .table-wrap{overflow-x:auto}
+  .semester-course-table table{min-width:610px}
+  .app-footer{padding:8px;font-size:.7rem}
+}
+@media(max-width:359.98px){
+  .metric{padding:11px;min-height:109px}
+  .metric-value{font-size:1.02rem}
+  .semester-metric{padding:10px}
+  .semester-amount{font-size:1.03rem}
+  .mobile-tab{font-size:.59rem}
+  .mobile-tab-icon{width:19px;height:19px}
+  .calendar-cell{padding:4px 1px;min-height:51px}
+  .calendar-number{font-size:.7rem}
+  .mobile-stack-table tbody td::before{flex-basis:80px}
+}
+@media(prefers-reduced-motion:reduce){.sidebar{transition:none!important}}
+body[data-theme=dark] .mobile-bottom-nav{background:rgba(28,43,64,.97);border-color:#3b4b62}
+body[data-theme=dark] .mobile-tab{color:#acbbd2}
+body[data-theme=dark] .mobile-tab.active{background:#294268;color:#e7efff}
+body[data-theme=dark] .mobile-stack-table tbody tr{background:#1c2b40}
+body[data-theme=dark] .mobile-stack-table tbody td::before{color:#a0aec5}
+
+/* The floating dock must not cover content or the last scrollable item. */
+@media(max-width:991.98px){
+  .app-footer{padding-bottom:18px}
+  .mobile-bottom-nav:focus-within{outline:1px solid transparent}
+  .mobile-tab:focus-visible{outline:2px solid #3a65e8;outline-offset:-3px}
+  .nav-symbol.bi-icon{width:21px;height:21px}
+  .mobile-menu-trigger .bi-icon{width:22px;height:22px}
+  .sidebar-close .bi-icon{width:18px;height:18px}
+}
+@media(min-width:992px){.nav-symbol.bi-icon{width:20px;height:20px}}

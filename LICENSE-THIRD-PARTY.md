@@ -9,3 +9,15 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+## Bootstrap Icons (MIT license)
+
+The selected navigation icons in `vendor/bootstrap-icons/*.svg` were converted from glyph outlines in the Bootstrap Icons distribution installed locally with MNE's report resources.
+
+Bootstrap Icons project: https://icons.getbootstrap.com/
+Source repository: https://github.com/twbs/icons
+License: https://github.com/twbs/icons/blob/main/LICENSE
+
+Copyright (c) Bootstrap Authors. Licensed under the MIT License.
+The MIT license permits redistribution and modification under the full permission and warranty disclaimer text above, which also applies to the selected icon artwork.

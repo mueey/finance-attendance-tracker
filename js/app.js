@@ -1,4 +1,5 @@
 import {initStore,subscribe} from './core/store.js';
+import {installMobileTables} from './core/mobile.js';
 import {setRefresh,renderSettings,toast} from './core/ui.js';
 import {accountExists,accountName,createAccount,signIn,signOut,isUnlocked} from './features/auth.js';
 import * as dashboard from './features/dashboard.js';
@@ -13,14 +14,24 @@ import * as settings from './features/settings.js';
 const modules={dashboard,courses,attendance,calendar,fines,bills,payments,reports,settings};
 const view=document.querySelector('#app-view'),shell=document.querySelector('#app-shell'),authShell=document.querySelector('#auth-shell');
 const sidebar=document.querySelector('#sidebar'),backdrop=document.querySelector('#sidebar-backdrop');
+const moreButton=document.querySelector('#mobile-more'),menuButton=document.querySelector('#menu-toggle');
 let started=false;
-function closeSidebar(){sidebar.classList.remove('open');backdrop.hidden=true;}
+function setSidebarOpen(open){
+ const hadSidebarFocus=sidebar.contains(document.activeElement);
+ sidebar.classList.toggle('open',open);backdrop.hidden=!open;
+ moreButton?.setAttribute('aria-expanded',String(open));
+ sidebar.inert=window.innerWidth<992&&!open;
+ menuButton?.setAttribute('aria-expanded',String(open));
+ if(open){sidebar.querySelector('.sidebar-nav .nav-link')?.focus();}
+ else if(hadSidebarFocus)menuButton?.focus({preventScroll:true});
+}
+function closeSidebar(){setSidebarOpen(false);}
 function draw(){
  if(!isUnlocked())return;
  const route=location.hash.replace(/^#\//,'').split(/[?#]/)[0],page=modules[route]?route:'dashboard';
- renderSettings();document.querySelectorAll('[data-route]').forEach(a=>{const active=a.dataset.route===page;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+ renderSettings();moreButton?.classList.toggle('active',!['dashboard','attendance','calendar','fines'].includes(page));document.querySelectorAll('[data-route]').forEach(a=>{const active=a.dataset.route===page;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
  view.onclick=null;view.innerHTML=modules[page].render();view.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('href',`#/${a.dataset.route}`));modules[page].bind();
- document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 2.2`;closeSidebar();
+ document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 2.7`;closeSidebar();
 }
 function connection(){const x=document.querySelector('#connection-status');if(!x)return;x.textContent=navigator.onLine?'● Ready offline':'● Offline mode';x.classList.toggle('offline',!navigator.onLine);}
 function fatal(err){view.innerHTML='<div class="card"><div class="card-body"><h1 class="fs-4 text-danger">Unable to load Trackerist data</h1><p id="fatal-message"></p><p>Your browser data was not intentionally reset. Check storage permissions or recover from a prior JSON backup.</p></div></div>';view.querySelector('#fatal-message').textContent=err.message||String(err);}
@@ -56,7 +67,12 @@ function start(){
  document.querySelector('#auth-show-password').onchange=e=>{document.querySelector('#auth-password').type=e.target.checked?'text':'password';document.querySelector('#auth-confirm').type=e.target.checked?'text':'password';};
  document.querySelector('#logout-button').onclick=()=>{signOut();view.innerHTML='';const instance=bootstrap.Modal.getInstance(document.querySelector('#editor-modal'));instance?.hide();showAuth();};
  document.querySelector('#quick-attendance').onclick=()=>attendance.openAttendanceEditor();
- document.querySelector('#menu-toggle').onclick=()=>{sidebar.classList.toggle('open');backdrop.hidden=!sidebar.classList.contains('open');};
+ menuButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('open'));
+ moreButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('open'));
+ document.querySelector('#sidebar-close').onclick=closeSidebar;
+ window.addEventListener('keydown',event=>{if(event.key==='Escape'&&sidebar.classList.contains('open')){closeSidebar();event.preventDefault();}});
+ window.addEventListener('resize',()=>{if(window.innerWidth>=992)closeSidebar();});
+ installMobileTables(view);
  backdrop.onclick=closeSidebar;sidebar.addEventListener('click',e=>{if(e.target.closest('[data-route]'))closeSidebar();});
  window.addEventListener('online',connection);window.addEventListener('offline',connection);
  showAuth();
