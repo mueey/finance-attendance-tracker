@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#12253c">
   <meta name="description" content="Offline attendance, fines, bills, and payment tracker">
-  <title>Trackerist 3.0 • Attendance & Finance</title>
+  <title>Trackerist 3.1 • Attendance & Finance</title>
   <link rel="icon" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="vendor/bootstrap.min.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/bootstrap-icons-local.css">
   <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/theme.css">
   <script src="vendor/bootstrap.bundle.min.js" defer></script>
   <script type="module" src="js/app.js"></script>
 </head>
@@ -40,6 +41,7 @@
     <nav id="primary-nav" class="nav flex-column sidebar-nav" aria-label="Main navigation">
       <a class="nav-link" href="#/dashboard" data-route="dashboard"><span class="nav-symbol bi-icon bi-speedometer2" aria-hidden="true"></span>Dashboard</a>
       <a class="nav-link" href="#/courses" data-route="courses"><span class="nav-symbol bi-icon bi-journal-text" aria-hidden="true"></span>Courses & Events</a>
+      <a class="nav-link" href="#/planner" data-route="planner"><span class="nav-symbol bi-icon bi-calendar3" aria-hidden="true"></span>Schedule Planner</a>
       <a class="nav-link" href="#/attendance" data-route="attendance"><span class="nav-symbol bi-icon bi-clipboard-check" aria-hidden="true"></span>Attendance</a>
       <a class="nav-link" href="#/calendar" data-route="calendar"><span class="nav-symbol bi-icon bi-calendar3" aria-hidden="true"></span>Calendar</a>
       <div class="nav-caption mt-4">FINANCES</div>
@@ -55,10 +57,10 @@
   <div class="main-area">
     <header class="topbar">
       <div class="d-flex align-items-center gap-3"><button class="btn btn-outline-secondary d-lg-none mobile-menu-trigger" id="menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false"><span class="bi-icon bi-list" aria-hidden="true"></span></button><div><div class="topbar-eyebrow">YOUR PERSONAL WORKSPACE</div><div class="topbar-title" id="workspace-name">My Workspace</div></div></div>
-      <div class="d-flex gap-2 align-items-center"><span class="connection-pill" id="connection-status">● Local first</span><button type="button" class="btn btn-primary btn-sm btn-quick" id="quick-attendance"><span class="bi-icon bi-plus-circle" aria-hidden="true"></span> Log attendance</button><button type="button" class="btn btn-outline-secondary btn-sm btn-logout" id="logout-button"><span class="bi-icon bi-box-arrow-right" aria-hidden="true"></span> Log out</button></div>
+      <div class="d-flex gap-2 align-items-center"><span class="connection-pill" id="connection-status">● Local first</span><button type="button" class="btn btn-outline-secondary btn-sm btn-theme" id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false" title="Switch theme"><span class="bi-icon bi-gear" aria-hidden="true"></span><span class="theme-button-label">Dark</span></button><button type="button" class="btn btn-primary btn-sm btn-quick" id="quick-attendance"><span class="bi-icon bi-plus-circle" aria-hidden="true"></span> Log attendance</button><button type="button" class="btn btn-outline-secondary btn-sm btn-logout" id="logout-button"><span class="bi-icon bi-box-arrow-right" aria-hidden="true"></span> Log out</button></div>
     </header>
     <main id="app-view" class="content-wrap" tabindex="-1"><div class="spinner-border text-primary" role="status" aria-label="Loading"></div></main>
-    <footer class="app-footer">Trackerist 3.0 <span>•</span> Offline-first <span>•</span> Browser-local data</footer>
+    <footer class="app-footer">Trackerist 3.1 <span>•</span> Offline-first <span>•</span> Browser-local data</footer>
   </div>
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile shortcuts">
     <a href="#/dashboard" data-route="dashboard" class="mobile-tab"><span class="mobile-tab-icon bi-icon bi-house-door-fill" aria-hidden="true"></span><span>Home</span></a>

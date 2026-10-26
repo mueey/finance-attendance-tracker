@@ -1,5 +1,6 @@
 import {html} from './utils.js';
 import {getState} from './store.js';
+import {applyTheme} from './theme.js';
 let refreshHandler=()=>{};
 export function setRefresh(fn){refreshHandler=fn;}
 export const refresh=()=>refreshHandler();
@@ -16,7 +17,7 @@ export function editModal({title,body,submit='Save changes',onSave}){
 }
 export function toast(message,isError=false){const host=document.querySelector('#toast-host'),elem=document.createElement('div');elem.className=`toast show align-items-center border-0 text-bg-${isError?'danger':'dark'}`;elem.setAttribute('role','status');elem.innerHTML=`<div class="d-flex"><div class="toast-body">${html(message)}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"></button></div>`;host.append(elem);elem.querySelector('button').onclick=()=>elem.remove();setTimeout(()=>elem.remove(),4600);}
 export function confirmDelete(label,fn){if(!confirm(`Delete ${label}? This cannot be undone. Consider exporting a backup first.`))return;try{fn();toast('Deleted');refresh();}catch(err){toast(err.message,true);}}
-export function renderSettings(){const s=getState().settings;document.body.dataset.theme=s.theme;document.querySelector('#workspace-name').textContent=s.workspace;}
+export function renderSettings(){const s=getState().settings;applyTheme(s.theme);document.querySelector('#workspace-name').textContent=s.workspace;}
 export function captureClick(id,fn){document.getElementById(id)?.addEventListener('click',fn)}
 export function escAttr(s){return html(s)}
 export function changeRoute(route){location.hash=`#/${route}`;}

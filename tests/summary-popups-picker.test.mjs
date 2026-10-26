@@ -62,6 +62,6 @@ test('pop-up bodies are scrollable in small screens and phone summary card stays
  assert.match(css,/#summary-modal \.modal-dialog\{height:100dvh/);
  assert.match(css,/\.semester-summary-launch\{[^}]+min-height:186px/);
  const sw=fs.readFileSync(new URL('../sw.js',import.meta.url),'utf8');
- assert.match(sw,/trackerist-v3\.0\.0/);
+ assert.match(sw,/trackerist-v3\.1\.0/);
  assert.match(sw,/\.\/js\/core\/course-picker\.js/);
 });

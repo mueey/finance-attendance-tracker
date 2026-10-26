@@ -1,0 +1,49 @@
+/* Trackerist 3.1: keep the workspace header visible while page content scrolls. */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:1025; /* below sidebar and Bootstrap dialogs */
+  background:var(--bs-body-bg,#fff);
+  box-shadow:0 3px 15px rgba(17,36,58,.05);
+}
+/* overflow-x:clip does not create a new scroll container (unlike hidden),
+   so position:sticky can track the viewport on modern mobile browsers. */
+body{overflow-x:clip}
+.btn-theme{display:inline-flex;gap:6px;align-items:center;justify-content:center;min-height:35px;white-space:nowrap}
+.schedule-reference{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:.8rem;color:var(--muted)}
+.schedule-reference strong{color:var(--ink)}
+.schedule-meta{font-size:.76rem;color:var(--muted);margin-top:3px}
+.planner-day .card-header{font-weight:750}
+.planner-day .card-body{display:flex;flex-direction:column;gap:10px}
+.planner-course{border:1px solid var(--border);border-radius:10px;padding:13px;background:var(--bs-tertiary-bg,#f7f9fd)}
+.planner-course .min-width-0{min-width:0;overflow-wrap:anywhere}
+.planner-events{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
+@media(max-width:575.98px){
+  .topbar{top:0}
+  .btn-theme{min-height:39px;min-width:50px}
+  .theme-button-label{display:none}
+  .topbar>div:last-child{gap:6px}
+}
+/* Bootstrap 5.3's color mode comes from html[data-bs-theme], custom tokens
+   remain on body[data-theme]. Override hard-coded light design remnants. */
+[data-bs-theme="dark"] .form-label,
+[data-bs-theme="dark"] .mini-muted,
+[data-bs-theme="dark"] .metric-label,
+[data-bs-theme="dark"] .metric-note{color:#b2c3da}
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .modal-content,
+[data-bs-theme="dark"] .topbar{border-color:#324960}
+[data-bs-theme="dark"] .table,
+[data-bs-theme="dark"] .table> :not(caption)>*>*{color:#e1e9f5;border-color:#354a62}
+[data-bs-theme="dark"] .planner-course{background:#26384f;border-color:#425771}
+[data-bs-theme="dark"] .btn-theme{color:#e3ebf7;border-color:#60738d}
+[data-bs-theme="dark"] .btn-light{--bs-btn-bg:#30445d;--bs-btn-color:#eef4ff;--bs-btn-border-color:#52667d}
+@media(max-width:575.98px){
+ .topbar .connection-pill{display:none}
+ .topbar .btn-quick{flex:1 1 auto;min-width:0}
+ .topbar .btn-theme{flex:0 0 auto}
+}
+
+[data-bs-theme="dark"] .text-bg-light{background-color:#314660!important;color:#e8f0ff!important;border-color:#536984!important}
+[data-bs-theme="dark"] .btn-close{filter:var(--bs-btn-close-filter,invert(1))}
+[data-bs-theme="dark"] .btn-outline-secondary{--bs-btn-color:#c8d6e9;--bs-btn-border-color:#5a718f;--bs-btn-hover-bg:#486280;--bs-btn-hover-border-color:#7087a2;--bs-btn-hover-color:#fff}

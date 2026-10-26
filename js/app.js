@@ -1,9 +1,11 @@
 import {initStore,subscribe} from './core/store.js';
 import {installMobileTables} from './core/mobile.js';
 import {setRefresh,renderSettings,toast} from './core/ui.js';
+import {applyTheme,toggleTheme} from './core/theme.js';
 import {accountExists,accountName,createAccount,signIn,signOut,isUnlocked} from './features/auth.js';
 import * as dashboard from './features/dashboard.js';
 import * as courses from './features/courses.js';
+import * as planner from './features/planner.js';
 import * as attendance from './features/attendance.js';
 import * as calendar from './features/calendar.js';
 import * as fines from './features/fines.js';
@@ -11,10 +13,11 @@ import * as bills from './features/bills.js';
 import * as payments from './features/payments.js';
 import * as reports from './features/reports.js';
 import * as settings from './features/settings.js';
-const modules={dashboard,courses,attendance,calendar,fines,bills,payments,reports,settings};
+const modules={dashboard,courses,planner,attendance,calendar,fines,bills,payments,reports,settings};
 const view=document.querySelector('#app-view'),shell=document.querySelector('#app-shell'),authShell=document.querySelector('#auth-shell');
 const sidebar=document.querySelector('#sidebar'),backdrop=document.querySelector('#sidebar-backdrop');
 const moreButton=document.querySelector('#mobile-more'),menuButton=document.querySelector('#menu-toggle');
+const themeButton=document.querySelector('#theme-toggle');
 let started=false;
 function setSidebarOpen(open){
  const hadSidebarFocus=sidebar.contains(document.activeElement);
@@ -31,7 +34,7 @@ function draw(){
  const route=location.hash.replace(/^#\//,'').split(/[?#]/)[0],page=modules[route]?route:'dashboard';
  renderSettings();moreButton?.classList.toggle('active',!['dashboard','attendance','calendar','fines'].includes(page));document.querySelectorAll('[data-route]').forEach(a=>{const active=a.dataset.route===page;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
  view.onclick=null;view.innerHTML=modules[page].render();view.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('href',`#/${a.dataset.route}`));modules[page].bind();
- document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 3.0`;closeSidebar();
+ document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 3.1`;closeSidebar();
 }
 function connection(){const x=document.querySelector('#connection-status');if(!x)return;x.textContent=navigator.onLine?'● Ready offline':'● Offline mode';x.classList.toggle('offline',!navigator.onLine);}
 function fatal(err){view.innerHTML='<div class="card"><div class="card-body"><h1 class="fs-4 text-danger">Unable to load Trackerist data</h1><p id="fatal-message"></p><p>Your browser data was not intentionally reset. Check storage permissions or recover from a prior JSON backup.</p></div></div>';view.querySelector('#fatal-message').textContent=err.message||String(err);}
@@ -55,6 +58,7 @@ function openDashboard(){
  catch(err){authShell.classList.add('d-none');shell.classList.remove('d-none');fatal(err);}
 }
 function start(){
+ applyTheme();
  const form=document.querySelector('#auth-form');
  form.onsubmit=async event=>{
   event.preventDefault();const create=!accountExists();const username=form.elements.username.value,password=form.elements.password.value;
@@ -67,6 +71,7 @@ function start(){
  document.querySelector('#auth-show-password').onchange=e=>{document.querySelector('#auth-password').type=e.target.checked?'text':'password';document.querySelector('#auth-confirm').type=e.target.checked?'text':'password';};
  document.querySelector('#logout-button').onclick=()=>{signOut();view.innerHTML='';for(const modalId of ['editor-modal','summary-modal'])bootstrap.Modal.getInstance(document.getElementById(modalId))?.hide();showAuth();};
  document.querySelector('#quick-attendance').onclick=()=>attendance.openAttendanceEditor();
+ themeButton.onclick=()=>{if(!isUnlocked())return;toggleTheme();};
  menuButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('open'));
  moreButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('open'));
  document.querySelector('#sidebar-close').onclick=closeSidebar;
