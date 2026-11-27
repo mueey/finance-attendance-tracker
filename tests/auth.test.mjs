@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {accountExists,createAccount,signIn,signOut,changePassword,isUnlocked} from '../js/features/auth.js';
-const db=new Map();globalThis.localStorage={getItem:k=>db.get(k)??null,setItem:(k,v)=>db.set(k,String(v))};
+const db=new Map();globalThis.localStorage={getItem:k=>db.get(k)??null,setItem:(k,v)=>db.set(k,String(v)),removeItem:k=>db.delete(k)};
 test('local login: registration, password check, logout, change password',async()=>{
  assert.equal(accountExists(),false);
  await assert.rejects(createAccount('ab','12345678'),/3–60/);

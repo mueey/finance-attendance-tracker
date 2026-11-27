@@ -5,9 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#12253c">
   <meta name="description" content="Offline attendance, fines, bills, and payment tracker">
-  <title>Trackerist 3.2 • Attendance & Finance</title>
+  <title>Trackerist 3.7 • Attendance & Finance</title>
+  <meta name="author" content="mue">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
+  <script>
+    /* Bootstrap and custom styling start in the saved theme before first paint. */
+    try {
+      const s = JSON.parse(localStorage.getItem('trackerist_v2_state') || 'null');
+      const mode = s?.settings?.theme === 'dark' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-bs-theme', mode);
+      document.documentElement.style.colorScheme = mode;
+    } catch { document.documentElement.setAttribute('data-bs-theme', 'light'); }
+  </script>
   <link rel="stylesheet" href="vendor/bootstrap.min.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/bootstrap-icons-local.css">
@@ -27,12 +37,14 @@
     <div class="mb-3"><label class="form-label" for="auth-password">Password</label><input class="form-control" id="auth-password" name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="Enter password"></div>
     <div class="mb-3 d-none" id="auth-confirm-wrap"><label class="form-label" for="auth-confirm">Confirm password</label><input class="form-control" id="auth-confirm" type="password" autocomplete="new-password" placeholder="Confirm password"></div>
     <div class="form-check mb-3"><input class="form-check-input" type="checkbox" id="auth-show-password"><label class="form-check-label small text-secondary" for="auth-show-password">Show password</label></div>
-    <div class="form-check mb-3 d-none" id="auth-privacy-wrap"><input class="form-check-input" type="checkbox" id="auth-privacy-ack" required disabled><label class="form-check-label small" for="auth-privacy-ack">I have read the <a href="./privacy.html" class="link-primary">Privacy Policy</a> and understand this is a browser-local account.</label></div>
+    <div class="form-check mb-3" id="auth-remember-wrap"><input class="form-check-input" type="checkbox" id="auth-remember"><label class="form-check-label" for="auth-remember">Remember me on this device for 30 days</label><div class="form-text">Only enable on your private device. Logging out will end the remembered session.</div></div>
+    <div class="form-check mb-3 d-none" id="auth-privacy-wrap"><input class="form-check-input" type="checkbox" id="auth-privacy-ack" required disabled><label class="form-check-label small" for="auth-privacy-ack">I have read the privacy notice and understand this is a browser-local account.</label></div>
     <div id="auth-error" class="auth-error mb-3 d-none" role="alert"></div>
     <button class="btn btn-primary w-100 py-3" id="auth-submit" type="submit">Sign in</button>
    </form>
    <div class="auth-notice mt-4" id="auth-notice">Offline local login only. Your attendance data is not encrypted; use a trusted device.</div>
-   <p class="text-center small mt-3 mb-0"><a href="./privacy.html" class="link-primary">Privacy Policy</a></p>
+   <p id="auth-privacy-footer" class="text-center small mt-3 mb-0"><a href="./privacy.html" class="link-primary">Privacy Policy</a></p>
+   <p class="auth-credit text-center small mt-2 mb-0">Concept &amp; system owner: <strong>mue</strong> · <a href="./credits.html">Credits</a></p>
   </div>
  </div>
 </section>
@@ -44,6 +56,7 @@
       <a class="nav-link" href="#/dashboard" data-route="dashboard"><span class="nav-symbol bi-icon bi-speedometer2" aria-hidden="true"></span>Dashboard</a>
       <a class="nav-link" href="#/courses" data-route="courses"><span class="nav-symbol bi-icon bi-journal-text" aria-hidden="true"></span>Courses & Events</a>
       <a class="nav-link" href="#/planner" data-route="planner"><span class="nav-symbol bi-icon bi-calendar3" aria-hidden="true"></span>Schedule Planner</a>
+      <a class="nav-link" href="#/scan" data-route="scan"><span class="nav-symbol bi-icon bi-journal-text" aria-hidden="true"></span>Scan Schedule</a>
       <a class="nav-link" href="#/attendance" data-route="attendance"><span class="nav-symbol bi-icon bi-clipboard-check" aria-hidden="true"></span>Attendance</a>
       <a class="nav-link" href="#/calendar" data-route="calendar"><span class="nav-symbol bi-icon bi-calendar3" aria-hidden="true"></span>Calendar</a>
       <div class="nav-caption mt-4">FINANCES</div>
@@ -52,6 +65,7 @@
       <a class="nav-link" href="#/payments" data-route="payments"><span class="nav-symbol bi-icon bi-credit-card" aria-hidden="true"></span>Payments</a>
       <div class="nav-caption mt-4">TOOLS</div>
       <a class="nav-link" href="#/reports" data-route="reports"><span class="nav-symbol bi-icon bi-graph-up" aria-hidden="true"></span>Reports</a>
+      <a class="nav-link" href="#/notifications" data-route="notifications"><span class="nav-symbol bi-icon bi-bell" aria-hidden="true"></span>Notifications</a>
       <a class="nav-link" href="#/settings" data-route="settings"><span class="nav-symbol bi-icon bi-gear" aria-hidden="true"></span>Settings & Backup</a>
     </nav>
     <div class="sidebar-bottom"><div class="privacy-dot"></div><div><strong>Private by default</strong><small>Data stays in this browser</small></div></div>
@@ -59,10 +73,10 @@
   <div class="main-area">
     <header class="topbar">
       <div class="d-flex align-items-center gap-3"><button class="btn btn-outline-secondary d-lg-none mobile-menu-trigger" id="menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false"><span class="bi-icon bi-list" aria-hidden="true"></span></button><div><div class="topbar-eyebrow">YOUR PERSONAL WORKSPACE</div><div class="topbar-title" id="workspace-name">My Workspace</div></div></div>
-      <div class="d-flex gap-2 align-items-center"><span class="connection-pill" id="connection-status">● Local first</span><button type="button" class="btn btn-outline-secondary btn-sm btn-theme" id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false" title="Switch theme"><span class="bi-icon bi-gear" aria-hidden="true"></span><span class="theme-button-label">Dark</span></button><button type="button" class="btn btn-primary btn-sm btn-quick" id="quick-attendance"><span class="bi-icon bi-plus-circle" aria-hidden="true"></span> Log attendance</button><button type="button" class="btn btn-outline-secondary btn-sm btn-logout" id="logout-button"><span class="bi-icon bi-box-arrow-right" aria-hidden="true"></span> Log out</button></div>
+      <div class="d-flex gap-2 align-items-center"><span class="connection-pill" id="connection-status">● Local first</span><a href="#/notifications" data-route="notifications" class="btn btn-outline-secondary btn-sm btn-bell" aria-label="Notifications" title="Attendance reminders"><span class="bi-icon bi-bell" aria-hidden="true"></span></a><button type="button" class="btn btn-outline-secondary btn-sm btn-theme" id="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false" title="Switch theme"><span class="bi-icon bi-gear" aria-hidden="true"></span><span class="theme-button-label">Dark</span></button><button type="button" class="btn btn-primary btn-sm btn-quick" id="quick-attendance"><span class="bi-icon bi-plus-circle" aria-hidden="true"></span> Log attendance</button><button type="button" class="btn btn-outline-secondary btn-sm btn-logout" id="logout-button"><span class="bi-icon bi-box-arrow-right" aria-hidden="true"></span> Log out</button></div>
     </header>
     <main id="app-view" class="content-wrap" tabindex="-1"><div class="spinner-border text-primary" role="status" aria-label="Loading"></div></main>
-    <footer class="app-footer">Trackerist 3.2 <span>•</span> Offline-first <span>•</span> Browser-local data</footer>
+    <footer class="app-footer">Trackerist 3.7 <span>•</span> Concept &amp; system by <strong>mue</strong> <span>•</span> <a href="./credits.html">Credits</a> <span>•</span> Offline-first</footer>
   </div>
   <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="Mobile shortcuts">
     <a href="#/dashboard" data-route="dashboard" class="mobile-tab"><span class="mobile-tab-icon bi-icon bi-house-door-fill" aria-hidden="true"></span><span>Home</span></a>

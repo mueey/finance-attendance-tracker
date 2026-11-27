@@ -47,7 +47,7 @@ test('theme supports light/dark with Bootstrap color mode and persists store sta
  assert.equal(getState().settings.theme,'dark');
  assert.equal(applyTheme(),'dark');assert.equal(attrs['data-bs-theme'],'dark');assert.equal(themeAttrs.theme,'dark');
  assert.equal(label.textContent,'Light');
- assert.equal(toggleTheme(),'light');assert.equal(themeAttrs.theme,'dark'); // store updated; theme applies on page refresh
+ assert.equal(toggleTheme(),'light');assert.equal(themeAttrs.theme,'light'); // immediate sync and persistence
  assert.equal(applyTheme(),'light');assert.equal(attrs['data-bs-theme'],'light');
 });
 test('sticky topbar and dark styling load offline',()=>{

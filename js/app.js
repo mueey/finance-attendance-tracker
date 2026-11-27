@@ -2,10 +2,11 @@ import {initStore,subscribe} from './core/store.js';
 import {installMobileTables} from './core/mobile.js';
 import {setRefresh,renderSettings,toast} from './core/ui.js';
 import {applyTheme,toggleTheme} from './core/theme.js';
-import {accountExists,accountName,createAccount,signIn,signOut,isUnlocked} from './features/auth.js';
+import {accountExists,accountName,createAccount,signIn,signOut,isUnlocked,restoreSession} from './features/auth.js';
 import * as dashboard from './features/dashboard.js';
 import * as courses from './features/courses.js';
 import * as planner from './features/planner.js';
+import * as scheduleScan from './features/schedule-scan.js';
 import * as attendance from './features/attendance.js';
 import * as calendar from './features/calendar.js';
 import * as fines from './features/fines.js';
@@ -13,7 +14,8 @@ import * as bills from './features/bills.js';
 import * as payments from './features/payments.js';
 import * as reports from './features/reports.js';
 import * as settings from './features/settings.js';
-const modules={dashboard,courses,planner,attendance,calendar,fines,bills,payments,reports,settings};
+import * as notifications from './features/notifications.js';
+const modules={dashboard,courses,planner,scan:scheduleScan,attendance,calendar,fines,bills,payments,reports,settings,notifications};
 const view=document.querySelector('#app-view'),shell=document.querySelector('#app-shell'),authShell=document.querySelector('#auth-shell');
 const sidebar=document.querySelector('#sidebar'),backdrop=document.querySelector('#sidebar-backdrop');
 const moreButton=document.querySelector('#mobile-more'),menuButton=document.querySelector('#menu-toggle');
@@ -34,7 +36,10 @@ function draw(){
  const route=location.hash.replace(/^#\//,'').split(/[?#]/)[0],page=modules[route]?route:'dashboard';
  renderSettings();moreButton?.classList.toggle('active',!['dashboard','attendance','calendar','fines'].includes(page));document.querySelectorAll('[data-route]').forEach(a=>{const active=a.dataset.route===page;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
  view.onclick=null;view.innerHTML=modules[page].render();view.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('href',`#/${a.dataset.route}`));modules[page].bind();
- document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 3.2`;closeSidebar();
+ document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 3.7`;closeSidebar();
+ const paramString=location.hash.includes('?')?location.hash.split('?')[1]:'';const params=new URLSearchParams(paramString);
+ const token=params.get('notificationIntent'),action=params.get('mark');
+ if(token){history.replaceState(null,'',location.pathname+location.search+'#/notifications');notifications.consumeNotificationIntent(token,action);}
 }
 function connection(){const x=document.querySelector('#connection-status');if(!x)return;x.textContent=navigator.onLine?'● Ready offline':'● Offline mode';x.classList.toggle('offline',!navigator.onLine);}
 function fatal(err){view.innerHTML='<div class="card"><div class="card-body"><h1 class="fs-4 text-danger">Unable to load Trackerist data</h1><p id="fatal-message"></p><p>Your browser data was not intentionally reset. Check storage permissions or recover from a prior JSON backup.</p></div></div>';view.querySelector('#fatal-message').textContent=err.message||String(err);}
@@ -47,16 +52,19 @@ function showAuth(){
  document.querySelector('#auth-submit').textContent=create?'Create account & open dashboard':'Sign in';
  document.querySelector('#auth-confirm-wrap').classList.toggle('d-none',!create);
  document.querySelector('#auth-privacy-wrap').classList.toggle('d-none',!create);
+ document.querySelector('#auth-remember').checked=false;
+ document.querySelector('#auth-show-password').checked=false;
+ document.querySelector('#auth-password').type='password';document.querySelector('#auth-confirm').type='password';
  const privacyAck=document.querySelector('#auth-privacy-ack');privacyAck.disabled=!create;privacyAck.required=create;privacyAck.checked=false;
  document.querySelector('#auth-password').autocomplete=create?'new-password':'current-password';
  document.querySelector('#auth-username').value=create?'':accountName();
  document.querySelector('#auth-password').value='';document.querySelector('#auth-confirm').value='';
  document.querySelector('#auth-error').classList.add('d-none');
- document.querySelector('#auth-notice').textContent=create?'This is a single-device account, not an online account. No password recovery is available. Back up your attendance data regularly.':'Login works offline. Your password is stored as a salted verifier, but local records are not encrypted.';
+ document.querySelector('#auth-notice').textContent=create?'This is a single-device account, not an online account. No password recovery is available. Back up your attendance data regularly.':'Login works offline. No plaintext password is stored, but local records are not encrypted. Only use Remember Me on a private device.';
  document.querySelector('#auth-username').focus();
 }
 function openDashboard(){
- try{if(!started){initStore();subscribe(draw);setRefresh(draw);window.addEventListener('hashchange',draw);started=true;}authShell.classList.add('d-none');shell.classList.remove('d-none');draw();connection();}
+ try{if(!started){initStore();subscribe(draw);setRefresh(draw);window.addEventListener('hashchange',draw);started=true;notifications.startReminders(isUnlocked);}authShell.classList.add('d-none');shell.classList.remove('d-none');draw();connection();}
  catch(err){authShell.classList.add('d-none');shell.classList.remove('d-none');fatal(err);}
 }
 function start(){
@@ -67,7 +75,7 @@ function start(){
   const error=document.querySelector('#auth-error'),submit=document.querySelector('#auth-submit');error.classList.add('d-none');
   if(create&&!document.querySelector('#auth-privacy-ack').checked){error.textContent='Please review and acknowledge the Privacy Policy before creating an account.';error.classList.remove('d-none');return;}
   if(create&&password!==document.querySelector('#auth-confirm').value){error.textContent='Passwords do not match.';error.classList.remove('d-none');return;}
-  submit.disabled=true;try{if(create)await createAccount(username,password);else await signIn(username,password);openDashboard();}
+  submit.disabled=true;try{const remember=document.querySelector('#auth-remember').checked;if(create)await createAccount(username,password,remember);else await signIn(username,password,remember);openDashboard();}
   catch(err){error.textContent=err.message||'Login failed.';error.classList.remove('d-none');}
   finally{submit.disabled=false;}
  };
@@ -83,7 +91,13 @@ function start(){
  installMobileTables(view);
  backdrop.onclick=closeSidebar;sidebar.addEventListener('click',e=>{if(e.target.closest('[data-route]'))closeSidebar();});
  window.addEventListener('online',connection);window.addEventListener('offline',connection);
- showAuth();
+ if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',event=>{
+  if(event.data?.type!=='TRACKERIST_NOTIFICATION_ACTION')return;
+  const token=String(event.data.token||''),action=String(event.data.action||'open');
+  location.hash='#/notifications?notificationIntent='+encodeURIComponent(token)+'&mark='+encodeURIComponent(action);
+  if(!isUnlocked())showAuth();else draw();
+ });
+ if(restoreSession())openDashboard();else showAuth();
  if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./sw.js').catch(()=>console.warn('Offline service worker registration failed.'));
 }
 try{start();}catch(err){document.querySelector('#auth-error').textContent=err.message||String(err);document.querySelector('#auth-error').classList.remove('d-none');}

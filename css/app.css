@@ -172,3 +172,28 @@ body[data-theme=dark] .semester-summary-launch:hover{background:#293e5d}
  .semester-launch-action{grid-column:2;grid-row:1 / span 2;font-size:0;justify-self:end;margin:0}
  .semester-launch-action .bi-icon{width:17px;height:17px}
 }
+
+/* Schedule photo import — responsive and scrollable. */
+.scan-photo-preview{display:block;width:100%;max-height:320px;object-fit:contain;background:var(--bs-tertiary-bg);border:1px solid var(--bs-border-color);border-radius:12px;margin-bottom:12px}
+.scan-textarea{min-height:180px;resize:vertical}
+.scan-review-list{max-height:min(65vh,740px);overflow-y:auto;overscroll-behavior:contain;padding:2px}
+.scan-row{background:var(--bs-body-bg)}
+.scan-row .form-label{display:block;font-size:.9rem;margin-bottom:0}
+.scan-row .form-label .form-control{margin-top:6px}
+.scan-row .weekday-grid{display:flex;flex-wrap:wrap;gap:7px}
+.scan-row .weekday-choice{min-width:42px}
+.scan-raw{overflow-wrap:anywhere}
+@media(max-width:575.98px){.scan-review-list{max-height:68vh}.scan-row{padding:12px!important}.scan-row .row{--bs-gutter-y:.75rem}}
+
+/* Notification shortcuts reuse Bootstrap buttons and bundled Bootstrap Icons. */
+.btn-bell{display:inline-flex;align-items:center;justify-content:center;min-width:35px;min-height:35px}
+.reminder-record{overflow-wrap:anywhere}
+.reminder-record:last-child{border-bottom:0!important}
+.reminder-record .attendance-quick-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+@media(max-width:420px){.reminder-record .attendance-quick-actions .btn{flex:1;min-width:78px}}
+
+/* Project attribution: readable on mobile and in both light/dark modes. */
+.auth-credit{color:var(--bs-secondary-color);overflow-wrap:anywhere}
+.auth-credit a,.app-footer a{text-decoration:underline;text-underline-offset:2px;color:inherit}
+.app-footer{overflow-wrap:anywhere;line-height:1.7}
+.app-footer strong{font-weight:750;color:var(--bs-body-color)}

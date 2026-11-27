@@ -10,7 +10,7 @@ export function applyTheme(value){
  }
  mode=normalizeTheme(mode);
  document.documentElement.setAttribute('data-bs-theme',mode); // Bootstrap 5.3 component variables
- document.body.dataset.theme=mode; // Trackerist custom design tokens
+ document.body.dataset.theme=mode; // compatibility with existing view styles
  document.documentElement.style.colorScheme=mode;
  const toggle=document.querySelector('#theme-toggle');
  if(toggle){const dark=mode==='dark';toggle.setAttribute('aria-pressed',String(dark));toggle.setAttribute('aria-label',dark?'Switch to light mode':'Switch to dark mode');toggle.title=dark?'Switch to light mode':'Switch to dark mode';const label=toggle.querySelector('.theme-button-label');if(label)label.textContent=dark?'Light':'Dark';}
@@ -18,6 +18,7 @@ export function applyTheme(value){
 }
 export function toggleTheme(){
  const next=getState().settings.theme==='dark'?'light':'dark';
- update(s=>{s.settings.theme=next;}); // state update also re-renders and applies theme
+ update(s=>{s.settings.theme=next;}); // persists and re-renders
+ applyTheme(next); // synchronize both theme scopes without waiting for another route render
  return next;
 }

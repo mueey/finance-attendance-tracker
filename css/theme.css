@@ -47,3 +47,194 @@ body{overflow-x:clip}
 [data-bs-theme="dark"] .text-bg-light{background-color:#314660!important;color:#e8f0ff!important;border-color:#536984!important}
 [data-bs-theme="dark"] .btn-close{filter:var(--bs-btn-close-filter,invert(1))}
 [data-bs-theme="dark"] .btn-outline-secondary{--bs-btn-color:#c8d6e9;--bs-btn-border-color:#5a718f;--bs-btn-hover-bg:#486280;--bs-btn-hover-border-color:#7087a2;--bs-btn-hover-color:#fff}
+
+
+/* Trackerist 3.7 — one coherent dark palette for every page and modal.
+   html[data-bs-theme] owns Bootstrap vars; custom view tokens live on body.
+   Keep these rules last to override legacy hard-coded light colors. */
+html[data-bs-theme="dark"] {
+  color-scheme: dark;
+  --bs-body-bg: #111d2e;
+  --bs-body-color: #eaf1fb;
+  --bs-secondary-color: #b5c4da;
+  --bs-tertiary-bg: #1e3048;
+  --bs-secondary-bg: #1b2b42;
+  --bs-border-color: #40556e;
+  --bs-link-color-rgb: 149,184,255;
+  --bs-link-hover-color-rgb: 181,204,255;
+}
+html[data-bs-theme="dark"] body {
+  --ink: #eaf1fb;
+  --muted: #b8c8dc;
+  --canvas: #111c2d;
+  --border: #354b63;
+  --blue: #9bb9ff;
+  --accent: #4bd6ba;
+  --danger: #ff93a4;
+  background: var(--canvas);
+  color: var(--ink);
+}
+html[data-bs-theme="dark"] .topbar,
+html[data-bs-theme="dark"] .card,
+html[data-bs-theme="dark"] .modal-content,
+html[data-bs-theme="dark"] .semester-summary-launch,
+html[data-bs-theme="dark"] .semester-subject-toggle,
+html[data-bs-theme="dark"] .attendance-course-results,
+html[data-bs-theme="dark"] .scan-row {
+  background: #1b2b41;
+  color: var(--ink);
+  border-color: var(--border);
+}
+html[data-bs-theme="dark"] .quick-card {
+  background: linear-gradient(115deg, #193858, #285178);
+  color: #f5f9ff;
+  border: 1px solid #46627f;
+}
+html[data-bs-theme="dark"] .quick-card .btn-light {
+  --bs-btn-bg: #e7f0ff;
+  --bs-btn-color: #1a3657;
+  --bs-btn-border-color: #d6e6fa;
+  --bs-btn-hover-bg: #cbdcf5;
+  --bs-btn-hover-color: #193452;
+  color: var(--bs-btn-color);
+}
+html[data-bs-theme="dark"] .card-header,
+html[data-bs-theme="dark"] .modal-header,
+html[data-bs-theme="dark"] .modal-footer,
+html[data-bs-theme="dark"] .semester-course-table,
+html[data-bs-theme="dark"] .semester-subject-section {
+  border-color: var(--border);
+}
+html[data-bs-theme="dark"] .mobile-bottom-nav {
+  background: rgba(25, 39, 59, .97);
+  border-color: #4b6381;
+  box-shadow: 0 12px 42px rgba(0, 0, 0, .48), 0 1px 5px rgba(0, 0, 0, .18);
+}
+html[data-bs-theme="dark"] .mobile-tab {color: #b5c7df;}
+html[data-bs-theme="dark"] .mobile-tab:hover,
+html[data-bs-theme="dark"] .mobile-tab:focus-visible {color:#eff5ff; background:#2a4162;}
+html[data-bs-theme="dark"] .mobile-tab.active,
+html[data-bs-theme="dark"] .mobile-tab[aria-current="page"],
+html[data-bs-theme="dark"] .mobile-tab:active {color:#fff; background:#355581;}
+html[data-bs-theme="dark"] .metric-icon {background:#314b78;color:#c7d8ff;}
+html[data-bs-theme="dark"] .metric-icon.green {background:#154d48;color:#92f4d7;}
+html[data-bs-theme="dark"] .metric-icon.red {background:#653344;color:#ffb2c0;}
+html[data-bs-theme="dark"] .metric-icon.yellow {background:#5e482a;color:#f8d590;}
+html[data-bs-theme="dark"] .metric-label,
+html[data-bs-theme="dark"] .metric-note,
+html[data-bs-theme="dark"] .mini-muted,
+html[data-bs-theme="dark"] .page-subtitle,
+html[data-bs-theme="dark"] .topbar-eyebrow,
+html[data-bs-theme="dark"] .muted-label,
+html[data-bs-theme="dark"] .divider-title,
+html[data-bs-theme="dark"] .calendar-count,
+html[data-bs-theme="dark"] .calendar-more,
+html[data-bs-theme="dark"] .calendar-header div,
+html[data-bs-theme="dark"] .auth-notice,
+html[data-bs-theme="dark"] .app-footer,
+html[data-bs-theme="dark"] .form-label {
+  color: var(--muted);
+}
+html[data-bs-theme="dark"] .table {--bs-table-color: #e6eefb; --bs-table-border-color:var(--border);}
+html[data-bs-theme="dark"] .table thead,
+html[data-bs-theme="dark"] .table th {color:#bdcde2; border-color:var(--border);}
+html[data-bs-theme="dark"] .table td,
+html[data-bs-theme="dark"] .table> :not(caption)>*>* {
+  color:#e6eefb;
+  border-color:var(--border);
+}
+html[data-bs-theme="dark"] .semester-course-table thead,
+html[data-bs-theme="dark"] .semester-subject-panel .semester-course-table thead {
+  background: #22344c;
+}
+html[data-bs-theme="dark"] .form-control,
+html[data-bs-theme="dark"] .form-select,
+html[data-bs-theme="dark"] .input-group-text {
+  background-color:#14243a;
+  color:#f0f5ff;
+  border-color:#536c87;
+}
+html[data-bs-theme="dark"] .form-control::placeholder {color:#b9c7d9;opacity:1;}
+html[data-bs-theme="dark"] .form-control:focus,
+html[data-bs-theme="dark"] .form-select:focus {
+  background-color:#172a44;
+  color:#fff;
+  border-color:#93b8ff;
+  box-shadow:0 0 0 .2rem rgba(140,175,255,.2);
+}
+html[data-bs-theme="dark"] .form-control:disabled,
+html[data-bs-theme="dark"] .form-select:disabled {background:#26374c;color:#aebed4;}
+html[data-bs-theme="dark"] .form-check-input:not(:checked) {background-color:#1b2f4b;border-color:#9eb4d1;}
+html[data-bs-theme="dark"] .form-text {color:#b8c8dc;}
+html[data-bs-theme="dark"] .btn-light:not(.quick-card .btn-light) {
+  --bs-btn-bg:#2e4663;
+  --bs-btn-color:#eef5ff;
+  --bs-btn-border-color:#526c89;
+  --bs-btn-hover-bg:#3d5a7c;
+  --bs-btn-hover-color:#fff;
+}
+html[data-bs-theme="dark"] .btn-outline-secondary {
+  --bs-btn-color:#d2dff0;
+  --bs-btn-border-color:#6f87a4;
+  --bs-btn-hover-bg:#405d80;
+  --bs-btn-hover-color:#fff;
+}
+html[data-bs-theme="dark"] .calendar-cell {
+  background: #22354d;
+  border-color: #445c77;
+  color: #eff5ff;
+}
+html[data-bs-theme="dark"] .calendar-cell.empty {background:transparent;border-color:transparent;}
+html[data-bs-theme="dark"] .calendar-cell.is-selected,
+html[data-bs-theme="dark"] .calendar-cell.is-today {background:#304b70;border-color:#92b6ff;}
+html[data-bs-theme="dark"] .calendar-subject {color:#d1dff2;}
+html[data-bs-theme="dark"] .dashboard-today,
+html[data-bs-theme="dark"] .semester-metric,
+html[data-bs-theme="dark"] .semester-breakdown,
+html[data-bs-theme="dark"] .planner-course {
+  background:#263b55;
+  color:#e5eefb;
+  border-color:#47617e;
+}
+html[data-bs-theme="dark"] .insight,
+html[data-bs-theme="dark"] .attendance-selected-course {
+  background:#233d61;
+  color:#e1edff;
+  border-color:#5b79a0;
+}
+html[data-bs-theme="dark"] .attendance-course-option {color:#e6eefb;}
+html[data-bs-theme="dark"] .attendance-course-option.is-selected,
+html[data-bs-theme="dark"] .attendance-course-option:hover,
+html[data-bs-theme="dark"] .attendance-course-option:focus-visible,
+html[data-bs-theme="dark"] .semester-subject-toggle:hover,
+html[data-bs-theme="dark"] .semester-summary-launch:hover {background:#2d4769;color:#fff;}
+html[data-bs-theme="dark"] .semester-launch-heading .bi-icon,
+html[data-bs-theme="dark"] .semester-launch-action,
+html[data-bs-theme="dark"] .link-button,
+html[data-bs-theme="dark"] .page-kicker {color:#a1bcff;}
+html[data-bs-theme="dark"] .progress {background:#405672;}
+html[data-bs-theme="dark"] .attendance-ring-track {stroke:#415c79;}
+html[data-bs-theme="dark"] .attendance-ring-goal {stroke:#d1dffd;}
+html[data-bs-theme="dark"] .chip-present {background:#124c3e;color:#a9ffdf;}
+html[data-bs-theme="dark"] .chip-absent,
+html[data-bs-theme="dark"] .chip-overdue {background:#642b3c;color:#ffc2cb;}
+html[data-bs-theme="dark"] .chip-excused {background:#5b4724;color:#ffe0a1;}
+html[data-bs-theme="dark"] .chip-holiday,
+html[data-bs-theme="dark"] .chip-class {background:#2c466e;color:#bfd5ff;}
+html[data-bs-theme="dark"] .chip-pending {background:#35475d;color:#d5e0f2;}
+html[data-bs-theme="dark"] .chip-event {background:#44336b;color:#ebd4ff;}
+html[data-bs-theme="dark"] .empty-state {color:#b4c3d7;}
+html[data-bs-theme="dark"] .empty-state strong {color:#e6eefb;}
+html[data-bs-theme="dark"] .connection-pill {background:#184a41;border-color:#387c6c;color:#b6ffdf;}
+html[data-bs-theme="dark"] .connection-pill.offline {background:#513e25;border-color:#86653d;color:#ffe1a3;}
+html[data-bs-theme="dark"] .auth-panel,
+html[data-bs-theme="dark"] .auth-layout {background:#192b42;color:#eff5ff;}
+html[data-bs-theme="dark"] .auth-error {background:#5d2839;color:#ffdae1;}
+html[data-bs-theme="dark"] .auth-credit {color:#bdcee3;}
+html[data-bs-theme="dark"] .app-footer strong {color:#eaf1fb;}
+html[data-bs-theme="dark"] .weekday-choice span {background:#253c58;color:#e0ecff;border-color:#637b99;}
+html[data-bs-theme="dark"] .weekday-choice input:checked+span {background:#365de0;color:#fff;}
+
+@media (prefers-reduced-motion:reduce){
+  html[data-bs-theme="dark"] *,html[data-bs-theme="light"] *{scroll-behavior:auto!important}
+}

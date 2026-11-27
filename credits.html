@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#15263e">
+  <meta name="author" content="mue">
+  <meta name="description" content="Trackerist project credits and attribution">
+  <title>Credits &amp; Attribution • Trackerist</title>
+  <link rel="icon" href="./icons/icon-192.png">
+  <script>
+    try{const s=JSON.parse(localStorage.getItem('trackerist_v2_state')||'null');document.documentElement.setAttribute('data-bs-theme',s?.settings?.theme==='dark'?'dark':'light')}catch{}
+  </script>
+  <link rel="stylesheet" href="./vendor/bootstrap.min.css">
+  <style>
+    body{background:var(--bs-tertiary-bg);min-height:100vh;color:var(--bs-body-color)}
+    .credits-wrap{max-width:800px;margin:auto;padding:clamp(18px,4vw,50px) 16px 50px}
+    .credits-card{background:var(--bs-body-bg);border:1px solid var(--bs-border-color);border-radius:22px;padding:clamp(22px,5vw,42px);box-shadow:0 12px 40px rgba(12,30,55,.06)}
+    .eyebrow{font-size:.72rem;letter-spacing:.13em;color:var(--bs-secondary-color);font-weight:800;text-transform:uppercase}
+    .identity{background:var(--bs-tertiary-bg);border:1px solid var(--bs-border-color);border-radius:15px;padding:22px}
+    .identity strong{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.2}
+    .identity p{margin:.35rem 0 0}
+    .credits-card a{overflow-wrap:anywhere}
+  </style>
+</head>
+<body>
+  <main class="credits-wrap">
+    <a class="btn btn-outline-primary mb-3" href="./index.html">&larr; Back to Trackerist</a>
+    <section class="credits-card" aria-labelledby="credits-heading">
+      <p class="eyebrow mb-2">Trackerist • Project attribution</p>
+      <h1 id="credits-heading" class="fw-bold mb-3">Credits &amp; Attribution</h1>
+      <div class="identity mb-4">
+        <p class="eyebrow mb-2">Original concept and system owner</p>
+        <strong>mue</strong>
+        <p class="text-body-secondary">Trackerist — Attendance, schedules, event fines, and finance tracking.</p>
+      </div>
+      <h2 class="h5 fw-bold">Project credit</h2>
+      <p>The Trackerist project credits <strong>mue</strong> for the original system idea and project ownership. This is the project attribution supplied by its owner.</p>
+      <p>Project repository: <a href="https://github.com/mueey/trackerist" rel="noopener noreferrer">github.com/mueey/trackerist</a>.</p>
+      <h2 class="h5 fw-bold mt-4">Third-party components</h2>
+      <p>The application includes Bootstrap and Bootstrap Icons, which retain their respective authors' credits and licenses. See <code>LICENSE-THIRD-PARTY.md</code> in the downloadable source package.</p>
+      <p class="small text-body-secondary mb-0">An attribution notice records how this project is credited; it does not by itself legally establish authorship, copyright ownership, or exclusive rights. Repository history and other dated documentation may help substantiate those claims.</p>
+    </section>
+  </main>
+</body>
+</html>
