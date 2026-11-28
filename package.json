@@ -1,6 +1,6 @@
 {
   "name": "trackerist-2",
-  "version": "4.5.4",
+  "version": "4.5.5",
   "private": true,
   "type": "module",
   "description": "Offline-first student academic workspace built with Bootstrap 5.3.6",
