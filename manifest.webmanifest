@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Trackerist 3.6 — Attendance & Finance",
+  "name": "Trackerist 4.2 — Bootstrap UI Edition",
   "short_name": "Trackerist",
-  "description": "Offline attendance and finance tracker with class schedule reminders and one-tap attendance actions",
+  "description": "Offline-first student academic workspace for attendance, schedules, finances, and productivity",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

@@ -1,9 +1,9 @@
 {
   "name": "trackerist-2",
-  "version": "3.7.0",
+  "version": "4.5.4",
   "private": true,
   "type": "module",
-  "description": "Offline attendance and finance tracker",
+  "description": "Offline-first student academic workspace built with Bootstrap 5.3.6",
   "scripts": {
     "test": "node --test tests/*.test.mjs"
   }
