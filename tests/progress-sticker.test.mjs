@@ -24,7 +24,7 @@ test('GIF and sticker media are stored in IndexedDB and included in JSON backup/
  assert.ok(media.includes('image\\/(?:gif|png|jpeg|webp)'));assert.match(settings,/progressStickerData/);
 });
 test('service worker cache is versioned for the user-uploaded sticker update',()=>{
- const sw=read('../sw.js');assert.match(sw,/trackerist-v4\.5\.4-calendar-reliability-fix/);assert.match(sw,/\.\/js\/core\/profile-media\.js/);
+ const sw=read('../sw.js');assert.match(sw,/trackerist-v4\.5\.5-responsive-mobile/);assert.match(sw,/\.\/js\/core\/profile-media\.js/);
 });
 
 test('Open productivity button is placed on a separate row below the academic progress sticker row',()=>{

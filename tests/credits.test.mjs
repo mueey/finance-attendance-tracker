@@ -10,7 +10,7 @@ test('sign-in and create-account show a single owner credit link',()=>{
 });
 test('logged-in footer names mue and links credits',()=>{
  const html=read('index.html');
- assert.match(html,/<footer class="app-footer">Trackerist 4\.5\.4[^<]*<span>•<\/span> Concept &amp; system by <strong>mue<\/strong>/);
+ assert.match(html,/<footer class="app-footer">Trackerist 4\.5\.5[^<]*<span>•<\/span> Concept &amp; system by <strong>mue<\/strong>/);
 });
 test('credits page documents mue and preserves third-party attribution',()=>{
  assert.equal(existsSync(new URL('../credits.html',import.meta.url)),true);
@@ -23,7 +23,7 @@ test('credits page documents mue and preserves third-party attribution',()=>{
 });
 test('credits page included in offline pre-cache',()=>{
  const sw=read('sw.js');
- assert.match(sw,/trackerist-v4\.5\.4-calendar-reliability-fix/);
+ assert.match(sw,/trackerist-v4\.5\.5-responsive-mobile/);
  assert.match(sw,/'\.\/credits.html'/);
 });
 test('project meta credits owner',()=>{

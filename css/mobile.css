@@ -163,3 +163,88 @@ body[data-theme=dark] .mobile-stack-table tbody td::before{color:#a0aec5}
   .mobile-menu-trigger .bi-icon{width:22px;height:22px}
 }
 @media(min-width:992px){.nav-symbol.bi-icon{width:20px;height:20px}}
+
+
+/* v4.5.5 responsive layout hardening: phone, tablet, and narrow landscape screens. */
+html{width:100%;min-width:320px;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{width:100%;min-width:320px;min-height:100vh;min-height:100dvh;overscroll-behavior-x:none}
+img,svg,video,canvas,iframe{max-width:100%}
+img,video{height:auto}
+.app-shell{width:100%;max-width:100%;min-width:0}
+.main-area,#app-view,.content-wrap{min-width:0;max-width:100%}
+#app-view>*{min-width:0;max-width:100%}
+#app-view .row{min-width:0}
+#app-view [class*="col-"]{min-width:0}
+#app-view .d-flex{min-width:0}
+#app-view .btn-group{max-width:100%;flex-wrap:wrap}
+#app-view pre,#app-view code{white-space:pre-wrap;overflow-wrap:anywhere}
+#app-view input,#app-view select,#app-view textarea{max-width:100%}
+#app-view .table-wrap{width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+#app-view table{max-width:100%}
+.modal-dialog{max-width:min(640px,calc(100vw - 24px))}
+.modal-content{max-width:100%;max-height:calc(100dvh - 24px);overflow:hidden}
+.modal-body{overflow-y:auto;overscroll-behavior:contain}
+.dropdown-menu{max-width:calc(100vw - 20px);overflow-wrap:anywhere}
+@media(max-width:991.98px){
+  .sidebar{position:fixed;inset:0 auto 0 0;height:100dvh;max-height:100dvh;min-height:0;overflow:hidden}
+  .sidebar .offcanvas-body{height:calc(100dvh - 90px);max-height:calc(100dvh - 90px);overflow-y:auto}
+  .main-area{width:100%;max-width:100%;min-width:0}
+  #app-view{width:100%;padding-bottom:20px}
+  .mobile-bottom-nav{padding-bottom:max(7px,env(safe-area-inset-bottom,0px))}
+  .mobile-tab{min-width:0;overflow:hidden}
+  .mobile-tab span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .modal-dialog{margin:12px auto}
+  .modal-content{max-height:calc(100dvh - 24px)}
+  .table-wrap:not(.mobile-stack-table){scrollbar-width:thin}
+}
+@media(max-width:767.98px){
+  #app-view .page-head{align-items:stretch}
+  #app-view .page-head>div{min-width:0;max-width:100%}
+  #app-view .page-head .d-flex{flex-wrap:wrap}
+  #app-view .page-head .btn{max-width:100%;white-space:normal}
+  #app-view .card, #app-view .card-body{min-width:0;max-width:100%}
+  #app-view .card-header{overflow-wrap:anywhere}
+  #app-view .calendar-card{min-width:0}
+  #app-view .calendar-grid,#app-view .calendar-header{grid-template-columns:repeat(7,minmax(0,1fr));width:100%}
+  #app-view .calendar-cell{min-width:0;overflow:hidden}
+  #app-view .calendar-number{overflow-wrap:anywhere}
+  #app-view .calendar-card-theme-preview-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+  #app-view .calendar-card-theme-preview-grid span{min-width:0}
+  #app-view .form-control,#app-view .form-select{min-width:0}
+  #app-view .modal-dialog{width:calc(100% - 16px);max-width:none;margin:8px auto}
+  #app-view .modal-content{max-height:calc(100dvh - 16px)}
+  #app-view .modal-footer{flex-wrap:wrap;gap:8px}
+  #app-view .modal-footer .btn{flex:1 1 auto}
+}
+@media(max-width:575.98px){
+  .main-area{padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+  .mobile-bottom-nav{bottom:calc(8px + env(safe-area-inset-bottom,0px));width:calc(100% - 16px);min-height:64px;border-radius:20px}
+  .mobile-tab{min-height:49px;padding:5px 1px;gap:3px}
+  #app-view .alert{overflow-wrap:anywhere}
+  #app-view .input-group{flex-wrap:wrap}
+  #app-view .input-group>.form-control,#app-view .input-group>.form-select{flex:1 1 100%;width:100%;border-radius:9px!important}
+  #app-view .input-group>.btn{flex:1 1 auto}
+  #app-view .calendar-grid,#app-view .calendar-header{gap:2px}
+  #app-view .calendar-cell{min-height:48px;padding:4px 1px;border-radius:6px}
+  #app-view .calendar-number{font-size:.72rem}
+  #app-view .calendar-header div{font-size:.58rem;letter-spacing:0}
+  #app-view .calendar-subjects{gap:2px}
+  #app-view .calendar-subject .cal-dot{width:6px;height:6px}
+  .toast-container{left:8px!important;right:8px!important;width:auto!important}
+  .toast{max-width:100%}
+}
+@media(max-width:359.98px){
+  .content-wrap{padding-left:8px;padding-right:8px}
+  .mobile-bottom-nav{width:calc(100% - 12px);padding-left:4px;padding-right:4px}
+  #app-view .calendar-cell{min-height:43px}
+}
+@media(max-height:520px) and (max-width:991.98px){
+  .mobile-bottom-nav{min-height:56px;bottom:5px;padding-top:3px;padding-bottom:3px}
+  .mobile-tab{min-height:44px;gap:2px}
+  .main-area{padding-bottom:78px}
+  .sidebar .offcanvas-body{height:calc(100dvh - 76px);max-height:calc(100dvh - 76px)}
+}
+@media(orientation:landscape) and (max-width:767.98px){
+  .mobile-bottom-nav{width:min(440px,calc(100% - 24px))}
+  .calendar-cell{min-height:52px}
+}

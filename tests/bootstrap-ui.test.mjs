@@ -40,5 +40,5 @@ test('business logic remains modular while UI uses Bootstrap components',()=>{
  for(const path of ['js/features/attendance.js','js/features/productivity.js','js/features/settings.js','js/core/store.js','js/core/ui.js']) assert.ok(read(path).length>0,path);
  assert.match(app,/from '\.\/features\/attendance\.js'/);
  assert.match(app,/from '\.\/features\/productivity\.js'/);
- assert.equal(pkg.version,'4.5.4');
+ assert.equal(pkg.version,'4.5.5');
 });
