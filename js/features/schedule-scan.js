@@ -7,13 +7,12 @@ import {toast} from '../core/ui.js';
 
 const starter='CS 105 | Web Development | Mon/Wed/Fri | 8:00 AM - 9:30 AM | Room B-204 | Prof. Santos | 2026-11-09 - 2027-03-31';
 
-export function render(){
+export function renderPanel(){
  const semesters=getState().semesters;
- return `${pageHead('Schedule Planner','Scan a Class Schedule','Take a photo or upload an image, review the detected subjects, then add confirmed weekly classes to your calendar.',
-  '<a href="#/planner" class="btn btn-outline-secondary">Back to Planner</a>')}
+ return `<div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3"><div><h3 class="section-title mb-1">Scan a Class Schedule</h3><p class="mini-muted mb-0">Upload a timetable or take a photo, review the detected subjects, then add confirmed classes.</p></div></div>
  <div class="row g-3 mb-4">
   <div class="col-lg-5"><section class="card h-100"><div class="card-body">
-    <h2 class="section-title mb-2"><span class="bi-icon bi-journal-text me-2" aria-hidden="true"></span>1. Upload or take a picture</h2>
+    <h4 class="section-title mb-2"><span class="bi-icon bi-journal-text me-2" aria-hidden="true"></span>1. Upload or take a picture</h4>
     <p class="text-secondary small">Choose a clear photo of a printed or digital class schedule. Avoid shadows and crop out unrelated details.</p>
     <div class="d-grid gap-2 mb-3">
       <label class="btn btn-primary" for="scan-camera">Take a photo <input id="scan-camera" type="file" accept="image/*" capture="environment" class="visually-hidden"></label>
@@ -24,20 +23,21 @@ export function render(){
     <p class="form-text mt-3 mb-0">Photos are processed on-device when supported, or by an optional offline OCR helper running on your own computer. They are not sent to third-party cloud services. Automatic text reading is not supported by every mobile browser.</p>
   </div></section></div>
   <div class="col-lg-7"><section class="card h-100"><div class="card-body">
-    <h2 class="section-title mb-2">2. Check the extracted text</h2>
+    <h4 class="section-title mb-2">2. Check the extracted text</h4>
     <label for="scan-text" class="form-label">Schedule text (editable)</label>
     <textarea id="scan-text" class="form-control scan-textarea" rows="8" placeholder="One class per line. Example:\n${html(starter)}"></textarea>
-    <div class="form-text">If image recognition is unavailable, use Copy Text in your phone's photo/gallery app, paste it here, and tap Find Classes. Supported: tables separated by |, tabs, or multiple spaces, plus labeled lines.</div>
+    <div class="form-text">If image recognition is unavailable, copy the text from your phone's photo/gallery app and paste it here. Supported: tables separated by |, tabs, or multiple spaces, plus labeled lines.</div>
     <div class="d-flex flex-wrap gap-2 mt-3"><button type="button" class="btn btn-primary" id="scan-parse">Find classes in text</button><button type="button" class="btn btn-outline-secondary" id="scan-example">Insert example</button></div>
    </div></section></div>
  </div>
- <section class="card mb-4 d-none" id="scan-review-section"><div class="card-body">
-  <div class="d-flex align-items-start flex-wrap justify-content-between gap-2"><div><h2 class="section-title mb-1">3. Review before importing</h2><p class="mini-muted">OCR can misread course names, weekday abbreviations, dates and room numbers. Edit every field before saving. The calendar will repeat subjects only on the checked days and within the chosen start/end dates.</p></div><button type="button" class="btn btn-outline-primary" id="scan-add-row">+ Add row manually</button></div>
+ <section class="card mb-2 d-none" id="scan-review-section"><div class="card-body">
+  <div class="d-flex align-items-start flex-wrap justify-content-between gap-2"><div><h4 class="section-title mb-1">3. Review before importing</h4><p class="mini-muted">OCR can misread course names, weekday abbreviations, dates and room numbers. Edit every field before saving.</p></div><button type="button" class="btn btn-outline-primary" id="scan-add-row">+ Add row manually</button></div>
   <div class="row g-2 align-items-end mb-3"><div class="col-md-6"><label class="form-label" for="scan-semester">Fill missing dates from a saved semester</label><select id="scan-semester" class="form-select"><option value="">Choose semester (optional)</option>${semesters.map(s=>`<option value="${html(s.id)}">${html(s.name)} (${html(s.startDate)} — ${html(s.endDate)})</option>`).join('')}</select></div><div class="col-md-6"><p class="form-text mb-0">Import is disabled for incomplete rows. Academic class fines remain zero, and existing attendance records are never overwritten.</p></div></div>
   <div id="scan-warnings" class="small mb-3" role="status"></div><div id="scan-row-list" class="scan-review-list"></div>
   <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mt-3 pt-3 border-top"><span id="scan-selected-count" class="mini-muted"></span><button id="scan-import" type="button" class="btn btn-success">Add selected classes to calendar</button></div>
  </div></section>`;
 }
+export function render(){return `${pageHead('Schedule Planner','Scan a Class Schedule','Take a photo or upload an image, review the detected subjects, then add confirmed weekly classes to your calendar.')}${renderPanel()}`;}
 
 function input(label,name,value='',type='text',required=false){return `<div class="col-md-6"><label class="form-label">${html(label)}<input class="form-control" type="${type}" data-field="${name}" value="${html(value)}" ${required?'required':''}></label></div>`;}
 function rowMarkup(row,index){
@@ -101,7 +101,7 @@ export function bind(){
   for(const item of entries){if(looksLikeDuplicate([...existing,...staged],item)){toast(`Possible duplicate: ${item.name}. Uncheck it before importing.`,true);return;}staged.push(item);}
   if(!confirm(`Add ${staged.length} academic class(es) to the calendar? Check all dates and names carefully.`))return;
   update(state=>{for(const entry of staged){state.courses.push({id:id(),type:'class',name:entry.name.slice(0,250),code:entry.code.slice(0,60),weekdays:entry.weekdays,schedule:formatWeekdays(entry.weekdays),time:entry.time,roomNumber:entry.roomNumber.slice(0,80),professorName:entry.professorName.slice(0,120),venue:'',startDate:entry.startDate,endDate:entry.endDate,eventDate:'',fineRate:0,createdAt:today(),archived:false});}});
-  toast(`${staged.length} class(es) added. Your calendar is ready.`);location.hash='#/planner';
+  toast(`${staged.length} class(es) added. Your calendar is ready.`);const modal=document.querySelector('#schedule-tools-modal');if(modal&&window.bootstrap?.Modal)bootstrap.Modal.getOrCreateInstance(modal).hide();location.hash='#/courses';
  };
  window.addEventListener('pagehide',()=>{if(previewUrl)URL.revokeObjectURL(previewUrl);},{once:true});
 }

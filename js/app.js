@@ -6,6 +6,7 @@ import {accountExists,accountName,createAccount,signIn,signOut,isUnlocked,restor
 import * as dashboard from './features/dashboard.js';
 import * as courses from './features/courses.js';
 import * as planner from './features/planner.js';
+import * as productivity from './features/productivity.js';
 import * as scheduleScan from './features/schedule-scan.js';
 import * as attendance from './features/attendance.js';
 import * as calendar from './features/calendar.js';
@@ -15,28 +16,36 @@ import * as payments from './features/payments.js';
 import * as reports from './features/reports.js';
 import * as settings from './features/settings.js';
 import * as notifications from './features/notifications.js';
-const modules={dashboard,courses,planner,scan:scheduleScan,attendance,calendar,fines,bills,payments,reports,settings,notifications};
+const modules={dashboard,courses,planner,productivity,scan:scheduleScan,attendance,calendar,fines,bills,payments,reports,settings,notifications};
 const view=document.querySelector('#app-view'),shell=document.querySelector('#app-shell'),authShell=document.querySelector('#auth-shell');
-const sidebar=document.querySelector('#sidebar'),backdrop=document.querySelector('#sidebar-backdrop');
-const moreButton=document.querySelector('#mobile-more'),menuButton=document.querySelector('#menu-toggle');
+const sidebar=document.querySelector('#sidebar');
+const moreButton=document.querySelector('#mobile-more');
 const themeButton=document.querySelector('#theme-toggle');
 let started=false;
+let sidebarReturnFocus=null;
 function setSidebarOpen(open){
- const hadSidebarFocus=sidebar.contains(document.activeElement);
- sidebar.classList.toggle('open',open);backdrop.hidden=!open;
- moreButton?.setAttribute('aria-expanded',String(open));
- sidebar.inert=window.innerWidth<992&&!open;
- menuButton?.setAttribute('aria-expanded',String(open));
- if(open){sidebar.querySelector('.sidebar-nav .nav-link')?.focus();}
- else if(hadSidebarFocus)menuButton?.focus({preventScroll:true});
+ if(window.innerWidth>=992)return;
+ const instance=bootstrap.Offcanvas.getOrCreateInstance(sidebar,{backdrop:true,scroll:false});
+ if(open){sidebarReturnFocus=document.activeElement;instance.show();}
+ else instance.hide();
 }
 function closeSidebar(){setSidebarOpen(false);}
+sidebar.addEventListener('shown.bs.offcanvas',()=>{
+ moreButton?.setAttribute('aria-expanded','true');
+ sidebar.querySelector('.sidebar-nav .nav-link')?.focus({preventScroll:true});
+});
+sidebar.addEventListener('hidden.bs.offcanvas',()=>{
+ moreButton?.setAttribute('aria-expanded','false');
+ const target=sidebarReturnFocus?.isConnected?sidebarReturnFocus:null;
+ if(window.innerWidth<992&&!shell.classList.contains('d-none')&&target&&!target.closest('.d-none'))target.focus({preventScroll:true});
+ sidebarReturnFocus=null;
+});
 function draw(){
  if(!isUnlocked())return;
  const route=location.hash.replace(/^#\//,'').split(/[?#]/)[0],page=modules[route]?route:'dashboard';
  renderSettings();moreButton?.classList.toggle('active',!['dashboard','attendance','calendar','fines'].includes(page));document.querySelectorAll('[data-route]').forEach(a=>{const active=a.dataset.route===page;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
- view.onclick=null;view.innerHTML=modules[page].render();view.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('href',`#/${a.dataset.route}`));modules[page].bind();
- document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 3.7`;closeSidebar();
+ view.onclick=null;view.innerHTML=modules[page].render();view.querySelectorAll('[data-route]').forEach(a=>a.setAttribute('href',`#/${a.dataset.route}`));modules[page].bind();applyTheme();
+ document.title=`${page.charAt(0).toUpperCase()+page.slice(1)} • Trackerist 4.5.2`;closeSidebar();
  const paramString=location.hash.includes('?')?location.hash.split('?')[1]:'';const params=new URLSearchParams(paramString);
  const token=params.get('notificationIntent'),action=params.get('mark');
  if(token){history.replaceState(null,'',location.pathname+location.search+'#/notifications');notifications.consumeNotificationIntent(token,action);}
@@ -64,7 +73,7 @@ function showAuth(){
  document.querySelector('#auth-username').focus();
 }
 function openDashboard(){
- try{if(!started){initStore();subscribe(draw);setRefresh(draw);window.addEventListener('hashchange',draw);started=true;notifications.startReminders(isUnlocked);}authShell.classList.add('d-none');shell.classList.remove('d-none');draw();connection();}
+ try{if(!started){initStore();subscribe(()=>{const route=location.hash.replace(/^#\//,'').split(/[?#]/)[0];const customizationOpen=route==='calendar'&&document.querySelector('#calendar-customize-modal.show');if(customizationOpen){calendar.refresh();return;}const scheduleToolsOpen=route==='courses'&&document.querySelector('#schedule-tools-modal.show');if(scheduleToolsOpen){courses.refreshCoursesView();return;}draw();});setRefresh(draw);window.addEventListener('hashchange',draw);started=true;notifications.startReminders(isUnlocked);}authShell.classList.add('d-none');shell.classList.remove('d-none');draw();connection();}
  catch(err){authShell.classList.add('d-none');shell.classList.remove('d-none');fatal(err);}
 }
 function start(){
@@ -81,15 +90,11 @@ function start(){
  };
  document.querySelector('#auth-show-password').onchange=e=>{document.querySelector('#auth-password').type=e.target.checked?'text':'password';document.querySelector('#auth-confirm').type=e.target.checked?'text':'password';};
  document.querySelector('#logout-button').onclick=()=>{signOut();view.innerHTML='';for(const modalId of ['editor-modal','summary-modal'])bootstrap.Modal.getInstance(document.getElementById(modalId))?.hide();showAuth();};
- document.querySelector('#quick-attendance').onclick=()=>attendance.openAttendanceEditor();
  themeButton.onclick=()=>{if(!isUnlocked())return;toggleTheme();};
- menuButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('open'));
- moreButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('open'));
- document.querySelector('#sidebar-close').onclick=closeSidebar;
- window.addEventListener('keydown',event=>{if(event.key==='Escape'&&sidebar.classList.contains('open')){closeSidebar();event.preventDefault();}});
- window.addEventListener('resize',()=>{if(window.innerWidth>=992)closeSidebar();});
+ moreButton.onclick=()=>setSidebarOpen(!sidebar.classList.contains('show'));
+ window.addEventListener('resize',()=>{if(window.innerWidth>=992){bootstrap.Offcanvas.getInstance(sidebar)?.hide();moreButton?.setAttribute('aria-expanded','false');}});
  installMobileTables(view);
- backdrop.onclick=closeSidebar;sidebar.addEventListener('click',e=>{if(e.target.closest('[data-route]'))closeSidebar();});
+ sidebar.addEventListener('click',e=>{if(e.target.closest('[data-route]'))closeSidebar();});
  window.addEventListener('online',connection);window.addEventListener('offline',connection);
  if('serviceWorker' in navigator)navigator.serviceWorker.addEventListener('message',event=>{
   if(event.data?.type!=='TRACKERIST_NOTIFICATION_ACTION')return;

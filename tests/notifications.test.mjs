@@ -58,7 +58,7 @@ test('notification center has quick action controls and the app only processes s
 });
 test('offline serviceworker and Bootstrap bell icons are shipped',()=>{
  const sw=read('sw.js'),page=read('index.html'),css=read('css/bootstrap-icons-local.css');
- assert.match(sw,/trackerist-v3\.7\.0/);
+ assert.match(sw,/trackerist-v4\.5\.4-calendar-reliability-fix/);
  for(const path of ['./js/features/notifications.js','./js/core/reminders.js','./vendor/bootstrap-icons/bell.svg']){
   assert.ok(sw.includes(path),path);assert.ok(existsSync(join(ROOT,path)),path);
  }

@@ -12,7 +12,8 @@ export function openAttendanceEditor(record=null,defaults={}){
  const courseId=record?.courseId||defaults.courseId||courses[0].id;
  const defaultSlots=normalizeEventSlots(record?.slots,record?.status)||Object.fromEntries(EVENT_SLOT_KEYS.map(k=>[k,record?.status==='absent'?'absent':record?.status==='excused'?'excused':'present']));
  const slotInputs=EVENT_SLOT_KEYS.map(key=>`<div class="col-sm-6">${selectField('slot_'+key,EVENT_SLOT_LABELS[key],slotOptions,defaultSlots[key],'col-12')}</div>`).join('');
- editModal({title:record?'Edit attendance entry':'Log attendance',submit:record?'Update attendance':'Save attendance',body:`<div class="row g-3">
+ editModal({title:record?'Correct attendance record':'Log attendance',submit:record?'Save correction':'Save attendance',body:`<div class="row g-3">
+ ${record?'<div class="col-12"><div class="alert alert-info mb-0"><strong>Correct a log:</strong> You can change the subject, date, attendance status, or note. The existing record will be updated rather than creating another one.</div></div>':''}
  ${coursePickerMarkup(courses,courseId)}
  ${field('date','Date',record?.date||defaults.date||today(),{type:'date',required:true})}
  <div class="col-12" id="class-status">${selectField('status','Attendance status',statusOptions,record?.status||'present','col-12')}<div class="form-text">Academic class absences affect attendance rates but do not generate fines.</div></div>
@@ -28,6 +29,7 @@ export function openAttendanceEditor(record=null,defaults={}){
  <div class="col-12"><div class="insight">Editing this record replaces its previous statuses. Fines recalculate instead of being duplicated; recorded payments stay in your ledger.</div></div></div>`,onSave:d=>{
    if(!validDate(d.date))throw Error('Enter a valid date.');
    const c=getState().courses.find(x=>x.id===d.courseId);if(!c)throw Error('Course not found.');
+   if(record&&record.courseId!==d.courseId&&!confirm(`Change this attendance record from ${getState().courses.find(x=>x.id===record.courseId)?.name||'the previous subject'} to ${c.name}? The old subject's attendance totals and any automatic event fine will be recalculated.`))return false;
    let status=d.status,slots=null;
    if(c.type==='event'){
      if(d.eventDayType==='holiday')status='holiday';
@@ -41,7 +43,7 @@ export function openAttendanceEditor(record=null,defaults={}){
      const existing=state.attendance.find(a=>a.courseId===d.courseId&&a.date===d.date);
      if(existing&&existing.id!==record?.id)throw Error('An attendance entry already exists for this course and date. Edit that entry instead.');
      const value={courseId:d.courseId,date:d.date,status,slots,note:d.note.trim(),updatedAt:new Date().toISOString()};
-     if(record)Object.assign(state.attendance.find(x=>x.id===record.id),value);
+     if(record){const target=state.attendance.find(x=>x.id===record.id);if(!target)throw Error('This attendance record no longer exists. Refresh the page and try again.');Object.assign(target,value);}
      else state.attendance.push({id:id(),...value});
    });
  }});
@@ -71,7 +73,7 @@ function draw(){
  document.querySelector('#attendance-table').innerHTML=items.length?`<div class="table-wrap"><table class="table"><thead><tr><th>Date</th><th>Course / event</th><th>Status</th><th>Event slots</th><th>Fine</th><th>Note</th><th>Actions</th></tr></thead><tbody>${items.map(a=>{
    const course=courses.get(a.courseId),counts=course?.type==='event'?countEventSlots(a.slots,a.status):null;
    const slotSummary=counts?counts.legacy?'Legacy absence (1 fine)':a.status==='holiday'?'Holiday':`${counts.present} Present · ${counts.absent} Absent · ${counts.excused} Excused`:'—';
-   return `<tr><td class="mono">${friendlyDate(a.date)}</td><td class="fw-semibold">${html(course?.name||'Deleted course')}</td><td>${chip(a.status)}</td><td class="small">${html(slotSummary)}</td><td class="mono">${money(fineByAttendance.get(a.id)||0)}</td><td class="text-secondary small">${html(a.note||'—')}</td><td><div class="d-flex gap-1"><button class="btn btn-sm btn-outline-primary table-action" data-edit="${html(a.id)}">Edit</button><button class="btn btn-sm btn-outline-danger table-action" data-delete="${html(a.id)}">Delete</button></div></td></tr>`;
+   return `<tr><td class="mono">${friendlyDate(a.date)}</td><td class="fw-semibold">${html(course?.name||'Deleted course')}</td><td>${chip(a.status)}</td><td class="small">${html(slotSummary)}</td><td class="mono">${money(fineByAttendance.get(a.id)||0)}</td><td class="text-secondary small">${html(a.note||'—')}</td><td><div class="d-flex gap-1"><button class="btn btn-sm btn-outline-primary table-action" data-edit="${html(a.id)}">Correct</button><button class="btn btn-sm btn-outline-danger table-action" data-delete="${html(a.id)}">Delete</button></div></td></tr>`;
  }).join('')}</tbody></table></div>`:blank('No attendance records','Log your first session or adjust the filters.');
 }
 export function bind(){captureClick('add-attendance',()=>openAttendanceEditor());for(const k of ['attendance-course','attendance-status','attendance-date'])document.querySelector('#'+k).onchange=draw;captureClick('attendance-clear',()=>{for(const k of ['attendance-course','attendance-status','attendance-date'])document.querySelector('#'+k).value='';draw();});document.querySelector('#attendance-table').onclick=e=>{const b=e.target.closest('button');if(!b)return;const a=getState().attendance.find(x=>x.id===(b.dataset.edit||b.dataset.delete));if(!a)return;if(b.dataset.edit)openAttendanceEditor(a);if(b.dataset.delete)confirmDelete(`attendance on ${a.date}`,()=>update(s=>{s.attendance=s.attendance.filter(x=>x.id!==a.id);}));};draw();}

@@ -36,7 +36,7 @@ test('duplicate detection blocks identical recurrence but permits different sect
 test('scan UI is integrated in app routes, planner, courses, privacy and offline cache',()=>{
  const read=f=>fs.readFileSync(path.join(root,f),'utf8');const sw=read('sw.js');const ui=read('js/features/schedule-scan.js');
  for(const asset of ['js/core/schedule-import.js','js/core/schedule-ocr.js','js/features/schedule-scan.js'])assert.ok(sw.includes(asset));
- assert.match(read('index.html'),/Scan Schedule/);assert.match(read('js/app.js'),/scan:scheduleScan/);assert.match(read('js/features/planner.js'),/#\/scan/);assert.match(read('js/features/courses.js'),/#\/scan/);
+ assert.doesNotMatch(read('index.html'),/data-route="(?:scan|planner)"/);assert.match(read('js/app.js'),/scan:scheduleScan/);assert.match(read('js/features/courses.js'),/id="schedule-tools-modal"/);assert.match(read('js/features/courses.js'),/scheduleScan\.renderPanel\(\)/);
  assert.match(ui,/capture="environment"/);assert.match(ui,/scan-row-list/);assert.match(ui,/scan-semester/);assert.match(ui,/fineRate:0/);
  assert.match(read('privacy.html'),/schedule photos/i);assert.match(read('run-ocr-server.py'),/NamedTemporaryFile/);
 });

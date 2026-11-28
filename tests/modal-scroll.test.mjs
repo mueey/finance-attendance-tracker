@@ -19,10 +19,10 @@ test('scrolling stays confined to modal body, with visible footer and mobile hei
  assert.match(css,/#editor-modal \.modal-body\{[^}]*overflow-y:auto/);
  assert.match(css,/#editor-modal \.modal-header,#editor-modal \.modal-footer\{flex-shrink:0\}/);
  assert.match(css,/#editor-modal \.modal-dialog\{height:100dvh\}/);
- assert.match(css,/\.sidebar\{overflow-y:auto/);
+ assert.match(css,/\.sidebar \.offcanvas-body\{[^}]*overflow-y:auto/);
 });
 test('service worker uses a new cache for the mobile UI update',()=>{
- assert.match(sw,/trackerist-v3\.7\.0/);
+ assert.match(sw,/trackerist-v4\.5\.4-calendar-reliability-fix/);
  assert.match(sw,/\.\/css\/app\.css/);
  assert.match(sw,/\.\/index\.html/);
  assert.match(sw,/\.\/js\/core\/ui\.js/);

@@ -54,7 +54,7 @@ test('Create Account has a privacy policy link and requires acknowledgment only 
  assert.match(app,/privacyAck\.disabled=!create;privacyAck\.required=create;privacyAck\.checked=false/);
  assert.match(app,/create&&!document\.querySelector\('#auth-privacy-ack'\)\.checked/);
  assert.match(policy,/<h1>Privacy Policy<\/h1>/);
- for(const term of ['localStorage','not encrypted at rest','hosting','clear the site','November 25, 2026'])assert.match(policy,new RegExp(term,'i'));
+ for(const term of ['localStorage','not encrypted at rest','hosting','clear the site','November 27, 2026'])assert.match(policy,new RegExp(term,'i'));
  assert.match(raw('sw.js'),/\.\/privacy\.html/);
  assert.doesNotMatch(policy,/(src|href)="https?:\/\//);
 });

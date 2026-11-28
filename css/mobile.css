@@ -15,10 +15,8 @@ button:focus-visible,a:focus-visible{outline:3px solid #8aafff;outline-offset:2p
 @media(max-width:991.98px){
   .app-shell{display:block;min-height:100dvh}
   .main-area{min-height:100dvh;padding-bottom:calc(122px + env(safe-area-inset-bottom,0px))}
-  .sidebar-close{display:block;margin-left:auto;background:#2b4161;color:#fff;border:1px solid #52647e;border-radius:9px;min-width:38px;min-height:38px;font-size:1.35rem;line-height:1}
+  .sidebar-close{display:block;margin-left:auto;min-width:38px;min-height:38px}
   .brand{gap:10px;padding:0 8px}
-  .sidebar{width:min(305px,88vw);max-width:100vw;height:100dvh;min-height:100dvh;padding:24px 15px 32px;box-shadow:8px 0 35px rgba(10,23,43,.12)}
-  .sidebar.open{box-shadow:8px 0 40px rgba(10,23,43,.35)}
   /* Floating bottom dock: never spans the full viewport edge-to-edge. */
   .mobile-bottom-nav{
     display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:stretch;
@@ -39,7 +37,6 @@ button:focus-visible,a:focus-visible{outline:3px solid #8aafff;outline-offset:2p
   .mobile-tab-icon{width:21px;height:21px;display:block}
   .mobile-tab.active,.mobile-tab[aria-current="page"]{background:#eaf0ff;color:#2c56d9}
   .mobile-tab:active{background:#dbe6ff}
-  .sidebar-backdrop:not([hidden]){z-index:1035}
   .topbar{min-height:66px}
   .content-wrap{max-width:100%}
   .toast-container{bottom:calc(102px + env(safe-area-inset-bottom,0px))!important;max-width:100vw}
@@ -164,6 +161,5 @@ body[data-theme=dark] .mobile-stack-table tbody td::before{color:#a0aec5}
   .mobile-tab:focus-visible{outline:2px solid #3a65e8;outline-offset:-3px}
   .nav-symbol.bi-icon{width:21px;height:21px}
   .mobile-menu-trigger .bi-icon{width:22px;height:22px}
-  .sidebar-close .bi-icon{width:18px;height:18px}
 }
 @media(min-width:992px){.nav-symbol.bi-icon{width:20px;height:20px}}

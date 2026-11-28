@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {initialState,validateAndNormalize} from '../js/core/migrate.js';
+const read=p=>fs.readFileSync(new URL(p,import.meta.url),'utf8');
+test('profile banner video preference safely defaults off and survives JSON state normalization',()=>{const state=initialState();assert.equal(state.settings.profileBannerVideo,false);state.settings.profileBannerVideo=true;assert.equal(validateAndNormalize(state).settings.profileBannerVideo,true);state.settings.profileBannerVideo='yes';assert.equal(validateAndNormalize(state).settings.profileBannerVideo,false);});
+test('settings allow MP4, WebM and MOV uploads with a size limit and video preview',()=>{const settings=read('../js/features/settings.js');assert.match(settings,/profileBannerMediaFile/);assert.match(settings,/video\/mp4,video\/webm,video\/quicktime/);assert.match(settings,/12\*1024\*1024/);assert.match(settings,/profile-banner-video-preview/);assert.match(settings,/saveBannerVideo/);assert.match(settings,/removeBannerVideo/);});
+test('dashboard renders an inline muted looping banner video and loads it from local media storage',()=>{const dashboard=read('../js/features/dashboard.js');assert.match(dashboard,/profile-banner-video/);assert.match(dashboard,/muted loop autoplay playsinline/);assert.match(dashboard,/getBannerVideo/);});
+test('video media uses IndexedDB and is included in JSON backup/restore',()=>{const media=read('../js/core/profile-media.js');const settings=read('../js/features/settings.js');assert.match(media,/indexedDB\.open/);assert.match(media,/banner-video/);assert.match(settings,/profileBannerVideoData/);assert.match(settings,/restoreBannerVideoDataURL/);assert.match(settings,/40\*1024\*1024/);});
+test('service worker precaches profile media module for offline use',()=>{const sw=read('../sw.js');assert.match(sw,/trackerist-v4\.5\.4-calendar-reliability-fix/);assert.match(sw,/\.\/js\/core\/profile-media\.js/);});

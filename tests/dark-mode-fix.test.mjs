@@ -25,7 +25,7 @@ test('theme state synchronizes instantly and offline cache includes updated styl
   const source=read('js/core/theme.js'),sw=read('sw.js');
   assert.match(source,/applyTheme\(next\)/);
   assert.match(source,/s\.settings\.theme=next/);
-  assert.match(sw,/trackerist-v3\.7\.0/);
+  assert.match(sw,/trackerist-v4\.5\.4-calendar-reliability-fix/);
   assert.match(sw,/\.\/css\/theme\.css/);
-  assert.match(read('index.html'),/Trackerist 3\.7/);
+  assert.match(read('index.html'),/Trackerist 4\.5\.4/);
 });

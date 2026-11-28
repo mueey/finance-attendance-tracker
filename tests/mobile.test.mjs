@@ -9,12 +9,14 @@ test('mobile has a five-item bottom tab bar with direct attendance access',()=>{
  for(const route of ['dashboard','attendance','calendar','fines']) assert.match(html,new RegExp(`class="mobile-tab"[^>]*data-route="${route}"|data-route="${route}" class="mobile-tab"`));
  assert.match(html,/id="mobile-more"[^>]*aria-controls="sidebar"/);
 });
-test('mobile navigation works with screen reader states and escape key',()=>{
- assert.match(app,/moreButton\.onclick/);
- assert.match(app,/sidebar\.inert=/);
- assert.match(html,/id="sidebar-close"/);
+test('mobile navigation uses accessible Bootstrap Offcanvas state and focus handling',()=>{
+ assert.match(html,/class="sidebar offcanvas-lg offcanvas-start"/);
+ assert.match(html,/id="sidebar-close"[^>]*data-bs-dismiss="offcanvas"/);
+ assert.match(app,/bootstrap\.Offcanvas\.getOrCreateInstance/);
+ assert.match(app,/shown\.bs\.offcanvas/);
+ assert.match(app,/hidden\.bs\.offcanvas/);
  assert.match(app,/aria-expanded/);
- assert.match(app,/event\.key==='Escape'/);
+ assert.doesNotMatch(app,/sidebar\.inert=/);
  assert.match(html,/aria-label="Mobile shortcuts"/);
 });
 test('records use original table nodes with field labels and not cloned actions',()=>{

@@ -50,11 +50,15 @@ test('theme supports light/dark with Bootstrap color mode and persists store sta
  assert.equal(toggleTheme(),'light');assert.equal(themeAttrs.theme,'light'); // immediate sync and persistence
  assert.equal(applyTheme(),'light');assert.equal(attrs['data-bs-theme'],'light');
 });
-test('sticky topbar and dark styling load offline',()=>{
- assert.match(file('index.html'),/id="theme-toggle"/);
- assert.match(file('index.html'),/href="#\/planner"/);
- assert.match(file('index.html'),/css\/theme\.css/);
- assert.match(file('css/theme.css'),/\.topbar\{[^}]*position:sticky;/);
+test('dashboard has no top header; theme/logout controls remain in the sidebar and dark styling loads offline',()=>{
+ const html=file('index.html');
+ assert.doesNotMatch(html,/<header class="topbar"/);
+ assert.match(html,/id="theme-toggle"/);
+ assert.match(html,/id="logout-button"/);
+ assert.match(html,/id="mobile-more"/);
+ assert.doesNotMatch(html,/data-route="planner"/);
+ assert.doesNotMatch(html,/data-route="scan"/);
+ assert.match(html,/css\/theme\.css/);
  assert.match(file('css/theme.css'),/body\{overflow-x:clip\}/);
  assert.match(file('js/core/ui.js'),/applyTheme\(s\.theme\)/);
  assert.match(file('sw.js'),/\.\/css\/theme\.css/);

@@ -1,10 +1,9 @@
-/* Trackerist 3.1: keep the workspace header visible while page content scrolls. */
+/* Trackerist 4.3: the workspace header scrolls naturally with the page. */
 .topbar{
-  position:sticky;
-  top:0;
-  z-index:1025; /* below sidebar and Bootstrap dialogs */
+  position:static;
+  z-index:auto;
   background:var(--bs-body-bg,#fff);
-  box-shadow:0 3px 15px rgba(17,36,58,.05);
+  box-shadow:none;
 }
 /* overflow-x:clip does not create a new scroll container (unlike hidden),
    so position:sticky can track the viewport on modern mobile browsers. */
@@ -19,7 +18,6 @@ body{overflow-x:clip}
 .planner-course .min-width-0{min-width:0;overflow-wrap:anywhere}
 .planner-events{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
 @media(max-width:575.98px){
-  .topbar{top:0}
   .btn-theme{min-height:39px;min-width:50px}
   .theme-button-label{display:none}
   .topbar>div:last-child{gap:6px}
@@ -238,3 +236,59 @@ html[data-bs-theme="dark"] .weekday-choice input:checked+span {background:#365de
 @media (prefers-reduced-motion:reduce){
   html[data-bs-theme="dark"] *,html[data-bs-theme="light"] *{scroll-behavior:auto!important}
 }
+
+
+/* Trackerist 4.0 personalization tokens */
+:root{--trackerist-accent:#3985ed}
+.btn-primary{--bs-btn-bg:var(--trackerist-accent);--bs-btn-border-color:var(--trackerist-accent);--bs-btn-hover-bg:color-mix(in srgb,var(--trackerist-accent),#000 12%);--bs-btn-hover-border-color:var(--bs-btn-hover-bg)}
+.btn-outline-primary{--bs-btn-color:var(--trackerist-accent);--bs-btn-border-color:var(--trackerist-accent);--bs-btn-hover-bg:var(--trackerist-accent);--bs-btn-hover-border-color:var(--trackerist-accent)}
+.form-check-input:checked{background-color:var(--trackerist-accent);border-color:var(--trackerist-accent)}
+html[data-font-size="small"]{font-size:14px}html[data-font-size="medium"]{font-size:16px}html[data-font-size="large"]{font-size:18px}
+html[data-density="compact"] .card-body{padding: .8rem}html[data-density="compact"] .card{margin-bottom:.65rem!important}
+html[data-density="spacious"] .card-body{padding:1.5rem}html[data-density="spacious"] .g-3{--bs-gutter-y:1.5rem;--bs-gutter-x:1.5rem}
+html[data-animations="off"] *,html[data-animations="off"] *::before,html[data-animations="off"] *::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+@media(min-width:992px){
+ html[data-navigation="bottom"] .sidebar{display:none!important}
+ html[data-navigation="bottom"] .mobile-bottom-nav,html[data-navigation="both"] .mobile-bottom-nav{display:flex!important;position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:1030;width:min(620px,calc(100% - 36px));justify-content:space-around}
+ html[data-navigation="bottom"] .main-area,html[data-navigation="both"] .main-area{padding-bottom:90px}
+}
+@media(max-width:991.98px){html[data-navigation="sidebar"] .mobile-bottom-nav{display:none!important}}
+
+
+/* Trackerist 4.1 — profile personalization and academic productivity. */
+.profile-banner{display:flex;align-items:center;gap:15px;padding:15px 18px;border:1px solid var(--border);border-radius:14px;background:var(--bs-body-bg,#fff);min-width:0}
+.profile-avatar{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;border-radius:16px;color:#fff;font-size:1.05rem;font-weight:850;letter-spacing:.3px;background:var(--profile-color,#365de0)}
+.profile-blue{--profile-color:#365de0}.profile-purple{--profile-color:#6741c8}.profile-green{--profile-color:#287d3c}.profile-orange{--profile-color:#b6531b}.profile-rose{--profile-color:#c13f68}
+.profile-banner-copy{min-width:0;display:grid;gap:3px}.profile-banner-copy>strong{font-size:1rem}.profile-banner-copy>div,.profile-banner-copy p{color:var(--muted);font-size:.78rem;margin:0;overflow-wrap:anywhere}
+.dashboard-widget-choice{height:100%;padding:11px 13px;border:1px solid var(--border);border-radius:10px;background:var(--bs-tertiary-bg)}
+.productivity-welcome .card-body{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.productivity-metric{padding:18px;min-height:126px}.productivity-metric .metric-value{font-size:1.9rem}
+.productivity-task-list{display:grid;gap:10px}.productivity-task{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:14px;border:1px solid var(--border);border-radius:12px;min-width:0}.productivity-task-main{min-width:0;flex:1}.productivity-task h3{font-size:.96rem;font-weight:800;margin:8px 0 3px;overflow-wrap:anywhere}.productivity-description{font-size:.8rem;color:var(--muted);margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.productivity-type,.productivity-priority,.productivity-status{display:inline-flex;align-items:center;border-radius:30px;padding:4px 8px;font-size:.67rem;font-weight:800;background:var(--bs-tertiary-bg);color:var(--ink)}
+.priority-high{background:#ffeaed;color:#a82e45}.priority-medium{background:#fff3d9;color:#94640c}.priority-low{background:#e7f5ee;color:#18734f}
+.status-completed{background:#e2f6ed;color:#176d4d}.status-overdue{background:#ffe8eb;color:#b53349}.status-in-progress{background:#e7efff;color:#315bb2}.status-todo{background:#edf1f6;color:#52647a}
+.productivity-task-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.productivity-deadline{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}.productivity-deadline:last-child{border-bottom:0}.productivity-deadline strong{font-size:.84rem}
+.study-week-grid{display:grid;gap:12px}.study-day h3{font-size:.74rem;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:850;margin:0 0 7px}.study-plan-item{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--border);border-radius:10px;padding:11px;margin-bottom:7px}.study-plan-item strong{font-size:.86rem}.focus-card{background:linear-gradient(150deg,#f7f9ff,#fff)}.focus-clock{font-size:clamp(2.8rem,7vw,4.2rem);font-weight:850;letter-spacing:-2px;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1.2;padding:12px 0}.focus-progress{height:9px;background:var(--bs-secondary-bg)}.focus-progress .progress-bar{background:var(--trackerist-accent,var(--bs-primary))}.productivity-mini-stat{height:100%;display:grid;gap:3px;padding:13px;border:1px solid var(--border);border-radius:10px;background:var(--bs-tertiary-bg)}.productivity-mini-stat strong{font-size:1.35rem;font-weight:850}.productivity-mini-stat span{font-size:.72rem;color:var(--muted)}.productivity-next-task{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--border)}.productivity-next-task strong{overflow-wrap:anywhere}
+html[data-bs-theme="dark"] .profile-banner,html[data-bs-theme="dark"] .productivity-task,html[data-bs-theme="dark"] .study-plan-item{background:#1b2b41;border-color:var(--border)}
+html[data-bs-theme="dark"] .dashboard-widget-choice,html[data-bs-theme="dark"] .productivity-mini-stat{background:#22354e;border-color:var(--border)}
+html[data-bs-theme="dark"] .focus-card{background:linear-gradient(150deg,#1d3049,#1b2b41);border-color:var(--border)}
+html[data-bs-theme="dark"] .priority-high,html[data-bs-theme="dark"] .status-overdue{background:#5b2c3a;color:#ffc0cb}html[data-bs-theme="dark"] .priority-medium{background:#57472a;color:#ffe0a0}html[data-bs-theme="dark"] .priority-low,html[data-bs-theme="dark"] .status-completed{background:#21483f;color:#a9efd3}html[data-bs-theme="dark"] .status-in-progress{background:#2a4265;color:#c4d7ff}html[data-bs-theme="dark"] .status-todo{background:#34465d;color:#d1deed}
+@media(max-width:575.98px){.profile-banner{padding:12px;gap:10px;flex-wrap:wrap}.profile-avatar{width:44px;height:44px;flex-basis:44px;border-radius:13px}.profile-banner-copy{flex:1}.profile-banner>.btn{width:100%;margin:0!important}.productivity-task{display:block}.productivity-task-actions{justify-content:flex-start;margin-top:12px}.productivity-task-actions .btn{flex:1}.study-plan-item{align-items:flex-start}.focus-clock{padding:7px 0}.productivity-deadline{align-items:flex-start}}
+
+/* Profile media customization */
+.profile-banner{background-position:center;background-size:cover;}
+.profile-avatar{overflow:hidden;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.settings-image-preview{width:76px;height:76px;object-fit:cover;border:1px solid var(--border);}
+.settings-banner-preview{width:100%;max-width:360px;height:96px;object-fit:cover;border:1px solid var(--border);}
+
+.profile-banner{position:relative;overflow:hidden;isolation:isolate;min-height:112px}.profile-banner-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}.profile-banner-video-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,20,38,.88),rgba(12,20,38,.42));z-index:-1;pointer-events:none}.profile-banner-copy,.profile-banner>.btn,.profile-banner .profile-avatar{position:relative;z-index:1}.settings-banner-preview{display:block;width:100%;max-height:180px;object-fit:cover}
+
+/* 4.3.5 dashboard declutter and tap-to-toggle personalization */
+.dashboard-widget-toggle{width:100%;min-height:48px;display:flex;align-items:center;gap:11px;text-align:left;padding:11px 14px;border:1px solid var(--border);border-radius:11px;background:var(--bs-body-bg);color:var(--ink);font-weight:650;transition:border-color .15s,background .15s,box-shadow .15s}
+.dashboard-widget-toggle:hover{border-color:var(--trackerist-accent,var(--bs-primary));}
+.dashboard-widget-toggle.is-selected{border-color:var(--trackerist-accent,var(--bs-primary));background:color-mix(in srgb,var(--trackerist-accent,var(--bs-primary)) 9%,var(--bs-body-bg));}
+.widget-toggle-indicator{width:10px;height:10px;flex:0 0 10px;border:1.5px solid var(--muted);border-radius:50%;background:transparent}
+.dashboard-widget-toggle.is-selected .widget-toggle-indicator{border-color:var(--trackerist-accent,var(--bs-primary));background:var(--trackerist-accent,var(--bs-primary));box-shadow:inset 0 0 0 2px var(--bs-body-bg)}
+.sidebar-utility .btn{font-size:.76rem;padding:8px 9px}.sidebar-utility .bi-icon{margin-right:5px}
+.main-area>.content-wrap{padding-top:clamp(22px,3vw,42px)}
